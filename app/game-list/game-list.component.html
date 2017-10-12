@@ -1,0 +1,7 @@
+<div class="fieldForGames" *ngIf="games.length">
+    <game-item 
+    class="oneGameArea"
+    *ngFor="let game of games" [game]="game" [ngClass]=[game.state]
+    (click)="join(game)"
+    ></game-item>
+</div>

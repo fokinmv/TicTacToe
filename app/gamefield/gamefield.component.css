@@ -1,0 +1,32 @@
+.gamefield{
+    text-align: center;
+}
+.players {
+    font-size: 36px;
+    height: 70px;
+    padding-top: 20px;
+}
+.owner{
+    float: left;
+    width: 50%;
+}
+.opponent{
+    float: left;
+    width: 50%;
+}
+.clear{
+    clear: left;
+}
+.timer {
+    padding-top: 20px;
+    height: 30px;
+}
+.Surrender {
+    height: 30px;
+    border: 0;
+    background-color: black;
+    color: white;
+}
+.yourTurn {
+    text-decoration:underline;
+}

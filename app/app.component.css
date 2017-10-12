@@ -1,0 +1,10 @@
+.container {
+height: 100%;
+margin-top: 75px;
+margin-left: 24px;
+margin-right: 24px;
+}
+.createGameField{
+    height: 60px;
+    border-bottom: 1px solid black;
+}

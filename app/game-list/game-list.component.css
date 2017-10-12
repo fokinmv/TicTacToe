@@ -1,0 +1,25 @@
+.fieldForGames{
+    margin-top: 30px;
+    background-color: lightgray;
+    height: 100%;
+}
+.oneGameArea{
+
+    height: 190px;
+    width: 22%;
+    display:inline-block;
+    position:relative;
+    margin: 0 4% 4% 0;
+}
+.oneGameArea:nth-of-type(4n) {
+    margin: 0 0 4% 0;
+}
+.ready{
+    background-color: green;
+}
+.playing{
+    background-color: yellow;
+}
+.done{
+    background-color: red;
+}

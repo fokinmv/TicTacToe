@@ -1,0 +1,15 @@
+<div class="createGameField">
+    <form (ngSubmit)="onSubmit()" #createForm="ngForm">
+
+        <input type="text" class=inputName placeholder="Введите ваше имя" required [(ngModel)]="user" name="user">
+
+        <select class="select-size" [(ngModel)]="size" name="size">
+            <option *ngFor="let siz of sizes" [value]="siz">{{siz}}</option>
+        </select>
+
+        <button type="submit" class="buttonCreateGame" [disabled]="createForm.form.invalid">
+            Создать игру
+       </button>
+    </form>
+</div>
+<game-list [userName]="user"></game-list>
