@@ -45,8 +45,7 @@ export class GamefieldComponent implements OnInit{
             this.game = this.gameService.getGame(this.gameToken);
 
             this.ownerTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.owner);
-            this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent
-            );
+            this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent);
 
             //проверяем, время с последней активности - если больше 5 минут - удаляем игру
             let timer5Min : number = 5*60*1000;
@@ -79,7 +78,6 @@ export class GamefieldComponent implements OnInit{
                         break;
                 }       
             }
-            console.log();
             this.drowX0(this.game.value, this.game.size);
         }, 2000);
         

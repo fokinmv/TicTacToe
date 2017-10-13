@@ -17,7 +17,7 @@ export class GameService {
         let allGames: any = this.getGamesFromDb();
         let gamesToJson = JSON.parse(allGames);
 
-        if (gamesToJson == null) gamesToJson = [];
+        //if (gamesToJson == null) gamesToJson = [];
 
         //сортировка по state - сначала ready, потом playing, потом done
         gamesToJson.sort(function(a:any,b:any){
@@ -154,6 +154,23 @@ export class GameService {
             newGameList.push(item);
         });
         //window.localStorage.setItem("games", JSON.stringify(newGameList));
+        this.saveGamesFromDb(newGameList);
+    }
+
+    checkAndDeleteInactivityGamesByList() {
+
+        let allGames: any = this.getGamesFromDb();
+
+        let objectAllGames = JSON.parse(allGames);
+
+        let timer10Min : number = 10*60*1000;
+        
+        let newGameList : any = [];
+
+        objectAllGames.forEach(function(item:Game, i:number, arr: any[]){
+           if((Date.now() - item.lastActivitesTime) < timer10Min) newGameList.push(item);
+        });
+
         this.saveGamesFromDb(newGameList);
     }
 

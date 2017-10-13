@@ -32,10 +32,9 @@ export class GameListComponent {
         this.games = this.gameService.getGameList();
         setInterval(() => {
             this.games = this.gameService.getGameList();
-            //проверять игры с бездействием 5 минут
-        }
-            , 2000);
-        
+            //проверять игры с бездействием 10 минут
+            if(this.games.length > 0) this.gameService.checkAndDeleteInactivityGamesByList();
+        }, 2000);
     }
 
     join(game: Game) {
