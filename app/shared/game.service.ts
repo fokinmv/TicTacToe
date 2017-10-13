@@ -191,11 +191,6 @@ export class GameService {
         return cellNumber;
     };
 
-    defineCellCenter(cellNumber: number, cellSize: number) {
-        let cellCenter = (cellNumber+0.5)*cellSize;
-        return cellCenter;
-    };
-
     enterValueCell(gameTokenFromUrl:string, x : number, y : number, role : string){
         
         let game  = this.getGame(gameTokenFromUrl);
