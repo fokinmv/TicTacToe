@@ -1,11 +1,10 @@
 .Player1, .Player2{
-    height: 45%;
-    font-size: 25px;
+    height: 44%;
 }
 .Timer{
     position:absolute;
-    right: 10px;
+    right: 0px;
 }
 .footerGameItem{
-    height: 10%;
+    height: 12%;
 }

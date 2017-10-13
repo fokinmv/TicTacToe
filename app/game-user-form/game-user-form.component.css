@@ -1,31 +1,40 @@
-.createGameField{
-    width: 100%;
-    height: 30px;
+.row{
+    margin: 0px;
+    font-size: 25px;
 }
 .inputName{
     background-color: lightgrey;
     border: 0;
-    font-size: 25px;
-    line-height: 0;
-    margin-top: 15px;
     outline:none;
-    float: left;
     color: grey;
 }
 .select-size{
-    font-size: 25px;
     background-color: lightgrey;
     border: 0;
-    margin-top: 15px;
-    float: left;
+    outline:none;
     color: grey;
 }
 .buttonCreateGame{
-    font-size: 25px;
-    float: left;
     background-color: lightgrey;
     border: 0;
-    margin-top: 15px;
-    float: left;
+    outline:none;
     color: grey;
+}
+@media (min-width: 550px) {
+    .vertical-align {
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1000px) {
+    .row{
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 2000px) {
+    .row{
+        font-size: 100px;
+    }
 }

@@ -9,7 +9,6 @@ import { Game } from '../shared/game.class';
     styleUrls: ["./game-item.component.css"]
 })
 
-//export class GameItemComponent {
 export class GameItemComponent implements OnInit{
     @Input() game: Game;
     timer: number;

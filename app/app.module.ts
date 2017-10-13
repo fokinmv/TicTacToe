@@ -11,8 +11,6 @@ import { GameService } from './shared/game.service';
 import { PaintService } from './shared/paint.service';
 import { GamefieldComponent } from './gamefield/gamefield.component';
 
-//import { AppRoutingModule } from './app-routing.module';
-
 const appRoutes = [
     { path: '', component: GameUserForm },
     { path: 'game/:gameToken', component: GamefieldComponent }
@@ -30,8 +28,6 @@ const appRoutes = [
         BrowserModule,
         FormsModule,
         RouterModule.forRoot(appRoutes),
-
-//        AppRoutingModule,
 
     ],
     providers: [

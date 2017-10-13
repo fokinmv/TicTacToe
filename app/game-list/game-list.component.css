@@ -1,11 +1,8 @@
 .fieldForGames{
-    margin-top: 30px;
     background-color: lightgray;
     height: 100%;
 }
 .oneGameArea{
-
-    height: 190px;
     width: 22%;
     display:inline-block;
     position:relative;
