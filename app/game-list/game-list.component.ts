@@ -26,7 +26,6 @@ export class GameListComponent {
         private router: Router)
     {
         this.games = [];
-        
     }
 
     isReadyVisible : boolean = false;
@@ -37,13 +36,13 @@ export class GameListComponent {
         this.games = this.gameService.getGameList();
         setInterval(() => {
             this.games = this.gameService.getGameList();
-            //проверять игры с бездействием 10 минут
+            //проверять и удалять игры с бездействием 10 минут только если есть хотя бы одна игра
             if(this.games.length > 0) this.gameService.checkAndDeleteInactivityGamesByList();
         }, 2000);
     }
 
     ngAfterViewInit(): void {
-        //изменяем шрифт содержимого в зависимости от ширины блока одной игры
+        //изменяем высоту блока и шрифт содержимого в зависимости от ширины блока одной игры
         setInterval(() => {
             let htmlBlockItemGame:HTMLElement|null = document.getElementById("oneGameArea");
             if (htmlBlockItemGame){
@@ -51,18 +50,18 @@ export class GameListComponent {
                 this.fontSize = Math.round(this.height/10);
             }
         },0);
-      }
+    }
 
     join(game: Game) {
         let gameToken: any = this.gameService.joinGame(game, this.userName);
         if(gameToken) {
             this.router.navigate(
             ['/game', gameToken],
-                {
-                    queryParams : {
-                        user : this.userName
-                    }
+            {
+                queryParams : {
+                    user : this.userName
                 }
+            }
             )
         }
     }

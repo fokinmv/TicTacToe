@@ -8,19 +8,19 @@ export class GameService {
         return window.localStorage.getItem("games");
     }
 
-    saveGamesFromDb(data:any):any{
+    saveGamesFromDb( data : any ) : any {
         window.localStorage.setItem("games", JSON.stringify(data));
     }
 
     getGameList() {
         
         let allGames: any = this.getGamesFromDb();
-        let gamesToJson = JSON.parse(allGames);
+        let objectAllGames = JSON.parse(allGames);
 
-        //if (gamesToJson == null) gamesToJson = [];
+        if (objectAllGames == null) objectAllGames = [];
 
         //сортировка по state - сначала ready, потом playing, потом done
-        gamesToJson.sort(function(a:any,b:any){
+        objectAllGames.sort(function( a : any , b : any ){
             let c = a.state;
             let d = b.state;
 
@@ -32,12 +32,12 @@ export class GameService {
                 return 0;
             })
 
-        this.games = gamesToJson;
+        this.games = objectAllGames;
 
         return this.games;
     }
 
-    createGame(owner:string, size:number){
+    createGame( owner : string, size : number ){
         let game = new Game (owner,"",size,Date.now(),Date.now(),"?","ready");
   
         //создаём матрицу игрового поля с пустыми значениями
@@ -52,42 +52,22 @@ export class GameService {
         window.localStorage.setItem("gameToken", game.gameToken);
         window.localStorage.setItem("accessTokenPlayer1", game.accessTokenPlayer1);
 
-        //добавляем новую игру в спикок игр - типа на сервер с бд
-        console.log("Получили = " + this.getGamesFromDb());
+        //добавляем новую игру в спиcок игр - типа на сервер с бд
         let allGames: any = this.getGamesFromDb();
-        //console.log("Получили от localStorage до добавления " + allGames);
-        
+        let objectAllGames = JSON.parse(allGames);
+        if (objectAllGames == null) objectAllGames = [];
+        objectAllGames.push(game);
 
-        let gamesToJson = JSON.parse(allGames);
-        //console.log("Получили от localStorage до добавления, после JSON.parse " + gamesToJson);
-        
-        if (gamesToJson == null) gamesToJson = [];
+        this.saveGamesFromDb(objectAllGames);
 
-        //console.log("Добавляем игру " + game);
-
-        gamesToJson.push(game);
-
-        //console.log("Получили после push " + gamesToJson);
-
-        //window.localStorage.setItem("games", JSON.stringify(gamesToJson));\
-        this.saveGamesFromDb(gamesToJson);
-
-        //console.log("Получили setItem " + window.localStorage.getItem("games"));
-
-        //this.games.push(game);
-
-        console.log("Перед ретёрном - " + game.gameToken);
         return game.gameToken;
-        
     }
 
-    joinGame(game: Game, user:string){
-        if(user) {
-            console.log("Ткнули по игре " + game.gameToken);
-
+    joinGame( game : Game, user : string ){
+        if( user ) {
             //Добавляем второго игрока, если второйигрок уже есть - просто возвращаем геймТокен, 
             //чтобы можно было присоединиться к игре в режиме наблюдателя
-            if(!game.opponent) { game.opponent = user;
+            if( !game.opponent ) { game.opponent = user;
                 //генерируем accessTokenPlayer2 - токен доступа для создающего игру
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
@@ -96,137 +76,128 @@ export class GameService {
                 //меняем время последней активности в игре
                 game.lastActivitesTime = Date.now();
                 //добавляем изменения о игре
-                //Достаем из локалсторадж все игры
-
                 let allGames: any = this.getGamesFromDb();
-                let gamesToJson = JSON.parse(allGames);
-
+                let objectAllGames = JSON.parse(allGames);
                 let newGameList : any = [];
                 //ищем в массиве из локалсторадж игру с нашим геймтокеном, если геймтокены совпадают,
                 //то меняем весь объект игры на новый, с добавл. оппонентом и аксТок2
-                gamesToJson.forEach(function(item:Game, i:number, arr: any[]){
+                objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
                     if(item.gameToken === game.gameToken) item = game;
                     newGameList.push(item);  
                 });
-                //window.localStorage.setItem("games", JSON.stringify(newGameList));
                 this.saveGamesFromDb(newGameList);
-
             }
+
             return game.gameToken;
         }
     }
 
-    getGame(gameTokenFromUrl:any) {
-        //console.log("Мы зашли в getGame " + gameTokenFromUrl);
+    getGame( gameTokenFromUrl : any ) {
         let allGames: any = this.getGamesFromDb();
-        let gamesToJson = JSON.parse(allGames);
-
+        let objectAllGames = JSON.parse(allGames);
         let neededGameItem : any;
         
-        gamesToJson.forEach(function(item:Game, i:number, arr: any[]){
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
             if(item.gameToken == gameTokenFromUrl.gameToken) neededGameItem = item;
-           // console.log("Мы нашли игру - " + JSON.stringify(neededGameItem));
         });
 
         return neededGameItem;
     }
 
-    saveGame(gameTokenFromUrl:any, game : Game) {
+    saveGame( gameTokenFromUrl : any, game : Game) {
         let allGames: any = this.getGamesFromDb();
-        let gamesToJson = JSON.parse(allGames);
+        let objectAllGames = JSON.parse(allGames);
         let newGameList : any = [];
 
-        gamesToJson.forEach(function(item:Game, i:number, arr: any[]){
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
             if(item.gameToken == gameTokenFromUrl.gameToken) item = game;
             newGameList.push(item);
         });
-        //window.localStorage.setItem("games", JSON.stringify(newGameList));
+        
         this.saveGamesFromDb(newGameList);
     }
 
-    deleteGame(gameTokenFromUrl:any){
+    deleteGame( gameTokenFromUrl : any ){
         let allGames: any = this.getGamesFromDb();
-        let gamesToJson = JSON.parse(allGames);
+        let objectAllGames = JSON.parse(allGames);
         let newGameList : any = [];
 
-        gamesToJson.forEach(function(item:Game, i:number, arr: any[]){
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
             if(item.gameToken == gameTokenFromUrl.gameToken) return;
             newGameList.push(item);
         });
-        //window.localStorage.setItem("games", JSON.stringify(newGameList));
+
         this.saveGamesFromDb(newGameList);
     }
 
     checkAndDeleteInactivityGamesByList() {
 
         let allGames: any = this.getGamesFromDb();
-
         let objectAllGames = JSON.parse(allGames);
 
         let timer10Min : number = 10*60*1000;
-        
         let newGameList : any = [];
 
-        objectAllGames.forEach(function(item:Game, i:number, arr: any[]){
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
            if((Date.now() - item.lastActivitesTime) < timer10Min) newGameList.push(item);
         });
 
         this.saveGamesFromDb(newGameList);
     }
 
-    gameSurrender(gameTokenFromUrl:string, user:string){
+    gameSurrender( gameToken : string, user : string ){
         
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         
         if(game.owner == user) game.gameResult = game.opponent;
         if(game.opponent == user) game.gameResult = game.owner;
 
         game.state = "done";
 
-        this.saveGame(gameTokenFromUrl, game);
+        this.saveGame(gameToken, game);
     }
 
-    defineCell(coordinate: any, cellSize: number) {
+    defineCell( coordinate : any, cellSize : number) {
         let cellNumber : number = Math.floor(coordinate/cellSize);
         return cellNumber;
     };
 
-    enterValueCell(gameTokenFromUrl:string, x : number, y : number, role : string){
+    enterValueCell( gameToken : string, x : number, y : number, role : string){
         
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
 
         let matrix = game.value;        
         matrix[y][x] = role;//x и y наоборот, так как в матрице первый индекс по вертикали, второй по горизонтали
         //меняем время последней активности в игре
         game.lastActivitesTime = Date.now();
         //записать игру
-        this.saveGame(gameTokenFromUrl, game);
+        this.saveGame(gameToken, game);
 
     };
 
-    checkCellValue(gameTokenFromUrl:string, x : number, y : number){
+    checkCellValue( gameToken : string, x : number, y : number){
 
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         let matrix = game.value;
         if (matrix[y][x] == null) return true;
 
     };
 
-    checkAccess(gameTokenFromUrl:string, user: string) {
+    checkAccess( gameToken : string, user : string) {
         
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         if((user===game.owner) || (user===game.opponent)) return true;
 
     }
 
-    checkWhoTurn (gameTokenFromUrl:string, user: string) : boolean | undefined{
+    checkWhoTurn ( gameToken : string, user : string) : boolean | undefined {
 
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         let matrix = game.value;
         let counter:number = 0;
 
-        for(let i:number=0; i<game.size; i++){
-            for(let j=0; j<game.size; j++){
+        for(let i : number = 0; i<game.size; i++){
+            for(let j = 0; j < game.size; j++){
                 if (matrix[i][j] != null) counter++;
             }
         }
@@ -237,15 +208,15 @@ export class GameService {
         
     }
 
-    checkWin(gameTokenFromUrl:string, x : number, y : number, role: string){
+    checkWin( gameToken : string, x : number, y : number, role : string){
 
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         let matrix = game.value;
 
         let size = game.size;
         let win = false;
-        //проверяем строки
 
+        //проверяем строки
         if ((x - 2 >= 0 ) && (matrix[y][x - 2] == role) && (matrix[y][x - 1] == role) && (matrix[y][x] == role)) win = true;
         if ((x - 1 >= 0 ) && (x + 1 < size ) && (matrix[y][x - 1] == role) && (matrix[y][x] == role) && (matrix[y][x + 1] == role)) win = true;
         if ((x + 2 < size ) && (matrix[y][x] == role) && (matrix[y][x + 1] == role) && (matrix[y][x + 2] == role)) win = true;
@@ -271,12 +242,12 @@ export class GameService {
             if(role == "0") game.gameResult = game.opponent;
             if((game.gameResult == game.owner) || (game.gameResult == game.opponent)) game.state = "done";
         }
-        this.saveGame(gameTokenFromUrl, game);
+        this.saveGame(gameToken, game);
     };
 
-    checkNullCell(gameTokenFromUrl:string){
+    checkNullCell( gameToken : string ){
 
-        let game  = this.getGame(gameTokenFromUrl);
+        let game  = this.getGame(gameToken);
         let matrix = game.value;
 
         let result = false;
@@ -289,12 +260,12 @@ export class GameService {
             game.gameResult = "draw";
             game.state = "done";
         }
-        this.saveGame(gameTokenFromUrl, game);
+        this.saveGame(gameToken, game);
     };
 
 }
 
-function createMatrix(size:number){
+function createMatrix( size : number ){
     let arr: any = [];
     for(let i=0; i<size; i++){
         arr[i] = [];
@@ -305,10 +276,10 @@ function createMatrix(size:number){
     return arr;
 };
 
-function generateGameToken(n:number):string{
-    let key:string = "";
-    let keyAbc:string = "abcdefghijklmnopqrstuvwxyz";
-    let key123:string = "0123456789";
+function generateGameToken( n : number ) : string {
+    let key : string = "";
+    let keyAbc : string = "abcdefghijklmnopqrstuvwxyz";
+    let key123 : string = "0123456789";
 
     while(key.length < n)
         key += keyAbc[Math.random() * keyAbc.length|0];
@@ -318,11 +289,11 @@ function generateGameToken(n:number):string{
     return key;
 };
 
-function generateAccessToken():string{
-    let key:string = "";
-    let keyAbc123:string = "abcdefghijklmnopqrstuvwxyz0123456789";
+function generateAccessToken() : string{
+    let key : string = "";
+    let keyAbc123 : string = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-    while(key.length < 12)
+    while( key.length < 12 )
     key += keyAbc123[Math.random() * keyAbc123.length|0];
 
     return key;

@@ -1,8 +1,8 @@
-<div class="fieldForGames" *ngIf="games.length">
-    <game-item id="oneGameArea"
-        class="oneGameArea" [style.height]=" height + 'px'" [style.font-size]=" fontSize + 'px'"
-        *ngFor="let game of games" [game]="game" [ngClass]=[game.state]
-        (click)="join(game)"
+<div class = "fieldForGames" *ngIf = "games.length">
+    <game-item id = "oneGameArea"
+        class = "oneGameArea" [style.height] = "height + 'px'" [style.font-size] = "fontSize + 'px'"
+        *ngFor = "let game of games" [game] = "game" [ngClass] = [game.state]
+        (click) = "join(game)"
     >
     </game-item>
 </div>

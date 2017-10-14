@@ -1,8 +1,8 @@
-.fieldForGames{
+.fieldForGames {
     background-color: lightgray;
     height: 100%;
 }
-.oneGameArea{
+.oneGameArea {
     width: 22%;
     display:inline-block;
     position:relative;
@@ -11,12 +11,12 @@
 .oneGameArea:nth-of-type(4n) {
     margin: 0 0 4% 0;
 }
-.ready{
+.ready {
     background-color: green;
 }
-.playing{
+.playing {
     background-color: yellow;
 }
-.done{
+.done {
     background-color: red;
 }

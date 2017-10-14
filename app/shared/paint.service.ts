@@ -1,11 +1,11 @@
 import { Game } from './game.class';
 
 export class PaintService {
-
-    cellSize = 50; //размер ячейки игрового поля
+    //размер ячейки игрового поля
+    cellSize = 50; 
     private canvas: any;
 
-    drawGameTable(canvas:any,gameSize:number){
+    drawGameTable( canvas : any, gameSize : number ) {
         this.canvas = canvas;
 
         if (this.canvas.getContext) {
@@ -27,7 +27,7 @@ export class PaintService {
         }
     }
 
-    drawX(canvas:any,coordinateCellX:number,coordinateCellY:number){
+    drawX( canvas : any, coordinateCellX : number, coordinateCellY : number ) {
 
         let centerCellX : number = this.defineCellCenter(coordinateCellX, this.cellSize);
         let centerCellY : number = this.defineCellCenter(coordinateCellY, this.cellSize);
@@ -59,7 +59,7 @@ export class PaintService {
         }
     }
 
-    draw0 (canvas:any,coordinateCellX : number, coordinateCellY : number){
+    draw0 ( canvas : any, coordinateCellX : number, coordinateCellY : number) {
         let centerCellX = this.defineCellCenter(coordinateCellX, this.cellSize);
         let centerCellY = this.defineCellCenter(coordinateCellY, this.cellSize);        
 
@@ -77,7 +77,7 @@ export class PaintService {
         }
     }
 
-    drawX0(canvas:any,value : any, size : number){
+    drawX0( canvas : any, value : any, size : number){
         for(var i=0; i<size; i++){
             for(var j=0; j<size; j++){
                 if (value[i][j] == 'X') this.drawX(canvas,j,i);
@@ -86,9 +86,8 @@ export class PaintService {
          }
     };
 
-    defineCellCenter(cellNumber: number, cellSize: number) {
+    defineCellCenter( cellNumber : number, cellSize : number) {
         let cellCenter = (cellNumber+0.5)*cellSize;
         return cellCenter;
-    };
-
+    }
 }

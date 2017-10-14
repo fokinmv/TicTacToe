@@ -28,7 +28,6 @@ const appRoutes = [
         BrowserModule,
         FormsModule,
         RouterModule.forRoot(appRoutes),
-
     ],
     providers: [
         GameService,

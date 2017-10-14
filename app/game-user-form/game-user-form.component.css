@@ -1,20 +1,20 @@
-.row{
+.row {
     margin: 0px;
     font-size: 25px;
 }
-.inputName{
+.inputName {
     background-color: lightgrey;
     border: 0;
     outline:none;
     color: grey;
 }
-.select-size{
+.select-size {
     background-color: lightgrey;
     border: 0;
     outline:none;
     color: grey;
 }
-.buttonCreateGame{
+.buttonCreateGame {
     background-color: lightgrey;
     border: 0;
     outline:none;
@@ -26,13 +26,11 @@
         align-items: center;
     }
 }
-
 @media (min-width: 1000px) {
     .row{
         font-size: 30px;
     }
 }
-
 @media (min-width: 2000px) {
     .row{
         font-size: 100px;

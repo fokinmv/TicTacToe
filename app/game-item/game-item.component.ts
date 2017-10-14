@@ -18,8 +18,8 @@ export class GameItemComponent implements OnInit{
     ngOnInit(){
         if(this.game.gameResult == this.game.owner) this.winnerOwner = "Win";
         if(this.game.gameResult == this.game.opponent) this.winnerOpponent = "Win";
-
-        //не нравится
+        
+        //интервал для реализации таймера на иконке игры
         setInterval(() => this.timer = Date.now() - this.game.gameCreateTime, 100);
     }
 }

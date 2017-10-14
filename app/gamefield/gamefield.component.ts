@@ -16,7 +16,6 @@ export class GamefieldComponent implements OnInit{
     @ViewChild('gamePlace') public gamePlace:ElementRef;
     private canvas: any;
 
-
     gameToken: any;
     game: Game;
     user: string;
@@ -39,27 +38,28 @@ export class GamefieldComponent implements OnInit{
     }
     ngOnInit(){
         this.game = this.gameService.getGame(this.gameToken);
-        //не нравится. Таймер для обновления времени          
+        //таймер для обновления времени          
         setInterval(() => this.timer = Date.now() - this.game.gameCreateTime, 100);
 
         //обновляем каждые 2 секунды
         let timerGame = setInterval(() => {
             this.game = this.gameService.getGame(this.gameToken);
 
+            //для индикации - чей ход
             this.ownerTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.owner);
             this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent);
 
             //проверяем, время с последней активности - если больше 5 минут - удаляем игру
             let timer5Min : number = 5*60*1000;
             if ((Date.now() - this.game.lastActivitesTime) > timer5Min) {
-                alert('Игра закрыта из-за бездействия игроков более 5 минут');
                 this.gameService.deleteGame(this.gameToken);
+                alert('Игра закрыта из-за бездействия игроков более 5 минут');
                 this.router.navigate(['/']);
                 clearInterval(timerGame);
             }
 
             //проверяем, может игра закончилась 
-            if(this.game.gameResult != ""){
+            if(this.game.gameResult != "?"){
                 switch (this.game.gameResult) {
                     case "draw":
                         alert('В этой игре никто не победил - Ничья');
@@ -80,30 +80,29 @@ export class GamefieldComponent implements OnInit{
                         break;
                 }       
             }
-            this.paintService.drawX0(this.canvas,this.game.value, this.game.size);
-        }, 2000);
-        
 
+
+            this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
+        }, 2000);
     }
+
     ngAfterViewInit() {
         this.canvas = this.gamePlace.nativeElement;
         //рисуем игровое поле
         this.paintService.drawGameTable(this.canvas, this.game.size);
-        //рисовать крестики/нолики если есть в поле такие
-        this.paintService.drawX0(this.canvas,this.game.value, this.game.size);
+        //рисовать крестики/нолики, если есть в поле такие
+        this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
     }
-    gameFieldClick(event: any){
-        console.log("Клик по игровому полю");
+
+    gameFieldClick(event: any){        
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
-            console.log("На игровое поле нажал Player1 или Player2");
-            
+
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
                 console.log("Ваш ход");
-                // определяем ячейку, куда ткнули
+
+                // определяем координаты ячейку, куда ткнули
                 let coordinateCellX : number = this.gameService.defineCell(event.offsetX, this.paintService.cellSize);
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
-                // вывод координаты выбранной ячейки в консоль
-                console.log("X: " + coordinateCellX + " Y: " + coordinateCellY); 
                 
                 if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
                     if (this.user == this.game.owner) {

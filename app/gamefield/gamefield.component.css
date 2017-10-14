@@ -1,4 +1,4 @@
-.gamefield{
+.gamefield {
     text-align: center;
 }
 .players {
@@ -6,21 +6,21 @@
     height: 70px;
     padding-top: 20px;
 }
-.owner{
+.owner {
     float: left;
     width: 50%;
 }
-.opponent{
+.opponent {
     float: left;
     width: 50%;
 }
-.clear{
+.clear {
     clear: left;
 }
 .timer {
     height: 30px;
 }
-.Surrender {
+.surrender {
     height: 30px;
     border: 0;
     background-color: black;

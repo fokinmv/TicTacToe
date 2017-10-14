@@ -1,18 +1,18 @@
-<div class="gamefield">
+<div class = "gamefield">
     <div class = "players">
-        <div class = "owner" [ngClass]="{'yourTurn' : this.ownerTurn }">
+        <div class = "owner" [ngClass] = "{'yourTurn' : this.ownerTurn}">
             {{this.game.owner}}
-            <img align="absmiddle" src="app/shared/img/ic_clear_black_48px.svg">
+            <img align = "absmiddle" src = "app/shared/img/ic_clear_black_48px.svg">
         </div>
-        <div class = "opponent" [ngClass]="{'yourTurn' : this.opponentTurn }">
-            <img align="absmiddle" src="app/shared/img/ic_block_black_48px.svg">
+        <div class = "opponent" [ngClass] = "{'yourTurn' : this.opponentTurn }">
+            <img align = "absmiddle" src = "app/shared/img/ic_block_black_48px.svg">
             {{this.game.opponent}}
         </div>
-        <div class="clear">
+        <div class = "clear">
         </div>
     </div>
             
-    <canvas (click)="gameFieldClick($event)" id='gamePlace' #gamePlace>
+    <canvas (click) = "gameFieldClick($event)" id = 'gamePlace' #gamePlace>
         Игровое поле
     </canvas>
         
@@ -20,7 +20,7 @@
         {{ timer | date:'mm:ss' }}
     </div>
                 
-    <button (click)="exit()" type="submit" class="Surrender">
-            Сдаться/Выйти
+    <button (click) = "exit()" type = "submit" class = "surrender">
+        Сдаться/Выйти
     </button>
 </div>

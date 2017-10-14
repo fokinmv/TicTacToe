@@ -1,19 +1,19 @@
-<form (ngSubmit)="onSubmit()" #createForm="ngForm">
-        <div class="row vertical-align">
+<form (ngSubmit) = "onSubmit()" #createForm = "ngForm">
+    <div class = "row vertical-align">
 
-            <input type="text" class="inputName col-xs-12 col-sm-5 col-md-3 col-lg-4" placeholder="Введите имя" required [(ngModel)]="user" name="user">
+        <input type = "text" class = "inputName col-xs-12 col-sm-5 col-md-3 col-lg-4" placeholder = "Введите имя" required [(ngModel)] = "user" name = "user">
 
-            <select class="select-size col-xs-4 col-sm-2 col-md-1 col-lg-1" [(ngModel)]="size" name="size">
-                <option *ngFor="let siz of sizes" [value]="siz">{{siz}}</option>
-            </select>
+        <select class = "select-size col-xs-4 col-sm-2 col-md-1 col-lg-1" [(ngModel)] = "size" name = "size">
+            <option *ngFor = "let siz of sizes" [value]="siz">{{siz}}</option>
+        </select>
 
-            <button type="submit" class="buttonCreateGame col-xs-8 col-sm-4 col-md-3 col-lg-4" [disabled]="createForm.form.invalid">
-                Создать игру
-            </button>
+        <button type = "submit" class = "buttonCreateGame col-xs-8 col-sm-4 col-md-3 col-lg-4" [disabled] = "createForm.form.invalid">
+            Создать игру
+        </button>
             
-            <div class="col-sm-1 col-md-5 col-lg-3">
-            </div>
-
+        <div class = "col-sm-1 col-md-5 col-lg-3">
         </div>
-    </form>
-<game-list [userName]="user"></game-list>
+
+    </div>
+</form>
+<game-list [userName] = "user"></game-list>
