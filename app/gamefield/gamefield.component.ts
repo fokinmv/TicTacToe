@@ -23,18 +23,18 @@ export class GamefieldComponent implements OnInit{
 
     ownerTurn: boolean | undefined = false;
     opponentTurn: boolean | undefined = false;
-
+    
     constructor(
         private router: Router,
-        private ar: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
         private gameService: GameService,
         private paintService: PaintService,
     ) 
     {
         //получаем gameToken из URL'а
-        ar.params.subscribe(param => this.gameToken = param);
+        activatedRoute.params.subscribe(param => this.gameToken = param);
         //получаем User'а из URL'а
-        ar.queryParams.subscribe(params => this.user = params.user);
+        activatedRoute.queryParams.subscribe(params => this.user = params.user);
     }
     ngOnInit(){
         this.game = this.gameService.getGame(this.gameToken);
@@ -80,7 +80,6 @@ export class GamefieldComponent implements OnInit{
                         break;
                 }       
             }
-
 
             this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
         }, 2000);
