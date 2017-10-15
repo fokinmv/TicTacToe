@@ -40,19 +40,17 @@ export class GameService {
     createGame( owner : string, size : number ){
         let game = new Game (owner,"",size,Date.now(),Date.now(),"?","ready");
   
-        //создаём матрицу игрового поля с пустыми значениями
         game.value = createMatrix(game.size);
-        //генерируем gameToken вида abc123, где n число букв и цифр в строке, которые потом складываем
-        let n = 3;
-        game.gameToken = generateGameToken(n);
-        //генерируем accessTokenPlayer1 - токен доступа для создающего игру
+
+        let signsNumber = 3;
+        game.gameToken = generateGameToken(signsNumber);
         game.accessTokenPlayer1 = generateAccessToken();
 
         //Якобы хэдэр с гейм токеном и аксесс токеном
         window.localStorage.setItem("gameToken", game.gameToken);
         window.localStorage.setItem("accessTokenPlayer1", game.accessTokenPlayer1);
 
-        //добавляем новую игру в спиcок игр - типа на сервер с бд
+        //добавляем новую игру в спиcок игр
         let allGames: any = this.getGamesFromDb();
         let objectAllGames = JSON.parse(allGames);
         if (objectAllGames == null) objectAllGames = [];
@@ -65,22 +63,19 @@ export class GameService {
 
     joinGame( game : Game, user : string ){
         if( user ) {
-            //Добавляем второго игрока, если второйигрок уже есть - просто возвращаем геймТокен, 
-            //чтобы можно было присоединиться к игре в режиме наблюдателя
+            //Добавляем второго игрока
             if( !game.opponent ) { game.opponent = user;
-                //генерируем accessTokenPlayer2 - токен доступа для создающего игру
+
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
-                //при появлении второго игрока - переводим статус игры в playing
+
                 game.state = "playing";
-                //меняем время последней активности в игре
                 game.lastActivitesTime = Date.now();
                 //добавляем изменения о игре
                 let allGames: any = this.getGamesFromDb();
                 let objectAllGames = JSON.parse(allGames);
                 let newGameList : any = [];
-                //ищем в массиве из локалсторадж игру с нашим геймтокеном, если геймтокены совпадают,
-                //то меняем весь объект игры на новый, с добавл. оппонентом и аксТок2
+
                 objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
                     if(item.gameToken === game.gameToken) item = game;
                     newGameList.push(item);  
@@ -168,9 +163,9 @@ export class GameService {
 
         let matrix = game.value;        
         matrix[y][x] = role;//x и y наоборот, так как в матрице первый индекс по вертикали, второй по горизонтали
-        //меняем время последней активности в игре
+
         game.lastActivitesTime = Date.now();
-        //записать игру
+
         this.saveGame(gameToken, game);
 
     };
@@ -276,14 +271,14 @@ function createMatrix( size : number ){
     return arr;
 };
 
-function generateGameToken( n : number ) : string {
+function generateGameToken( signsNumber : number ) : string {
     let key : string = "";
     let keyAbc : string = "abcdefghijklmnopqrstuvwxyz";
     let key123 : string = "0123456789";
 
-    while(key.length < n)
+    while(key.length < signsNumber)
         key += keyAbc[Math.random() * keyAbc.length|0];
-    while(key.length < 2*n)
+    while(key.length < 2*signsNumber)
     key += key123[Math.random() * key123.length|0];
 
     return key;
