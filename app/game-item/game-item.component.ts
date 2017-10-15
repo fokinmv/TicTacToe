@@ -17,7 +17,7 @@ export class GameItemComponent implements OnInit{
 
     ngOnInit(){
         if(this.game.gameResult == this.game.owner) this.winnerOwner = "Win";
-        if(this.game.gameResult == this.game.opponent) this.winnerOpponent = "Win";
+        if((this.game.opponent != "") && (this.game.gameResult == this.game.opponent)) this.winnerOpponent = "Win";
         
         //интервал для реализации таймера на иконке игры
         setInterval(() => this.timer = Date.now() - this.game.gameCreateTime, 100);

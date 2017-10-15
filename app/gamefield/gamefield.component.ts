@@ -74,7 +74,9 @@ export class GamefieldComponent implements OnInit{
                         break;
 
                     case this.game.opponent:
-                        alert('В этой игре победил игрок ' + this.game.gameResult);
+                        if (this.game.opponent != "") {
+                            alert('В этой игре победил игрок ' + this.game.gameResult);
+                        }
                         this.router.navigate(['/']);
                         clearInterval(timerGame);
                         break;
