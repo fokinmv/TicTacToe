@@ -4,7 +4,7 @@
         <input type = "text" class = "inputName col-xs-12 col-sm-5 col-md-3 col-lg-4" placeholder = "Введите имя" required [(ngModel)] = "user" name = "user">
 
         <select class = "selectSize col-xs-4 col-sm-2 col-md-1 col-lg-1" [(ngModel)] = "size" name = "size">
-            <option *ngFor = "let siz of sizes" [value]="siz">{{siz}}</option>
+            <option *ngFor = "let size_i of sizes" [value]="size_i">{{size_i}}</option>
         </select>
 
         <button type = "submit" class = "buttonCreateGame col-xs-8 col-sm-4 col-md-3 col-lg-4" [disabled] = "createForm.form.invalid">
