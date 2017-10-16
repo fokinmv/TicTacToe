@@ -8,11 +8,11 @@ import { PaintService } from '../shared/paint.service';
 
 @Component({
     moduleId: module.id,
-    selector: 'app-gamefield',
-    templateUrl: "./gamefield.component.html",
-    styleUrls: ["./gamefield.component.css"]
+    selector: 'app-game-field',
+    templateUrl: "./game-field.component.html",
+    styleUrls: ["./game-field.component.css"]
 })
-export class GamefieldComponent implements OnInit{
+export class GameFieldComponent implements OnInit{
     @ViewChild('gamePlace') public gamePlace:ElementRef;
     private canvas: any;
 
