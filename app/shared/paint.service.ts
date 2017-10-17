@@ -2,7 +2,7 @@ import { Game } from './game.class';
 
 export class PaintService {
 
-    cellSize = 50; 
+    cellSize : number = 50; 
     roleX : string = "X";
     role0 : string = "0";
     indentation : number = 0.25;
@@ -71,7 +71,7 @@ export class PaintService {
 
         if (this.canvas.getContext) {
             let canvas = this.canvas;
-            if (canvas.getContext) {        
+            if (canvas.getContext) {
                 var ctx = canvas.getContext('2d');
 
                 ctx.beginPath();
