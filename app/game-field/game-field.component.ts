@@ -26,6 +26,7 @@ export class GameFieldComponent implements OnInit{
 
     timer5Min : number = 5*60*1000;
     defaultGameResult : string = "?";
+    defaultOpponent : string = "";
 
     constructor(
         private router: Router,
@@ -68,7 +69,7 @@ export class GameFieldComponent implements OnInit{
                         break;
 
                     case this.game.opponent:
-                        if (this.game.opponent != "") {
+                        if (this.gameOpponentExist(this.game)) {
                             alert('В этой игре победил игрок ' + this.game.gameResult);
                         }
                         this.router.navigate(['/']);
@@ -140,6 +141,10 @@ export class GameFieldComponent implements OnInit{
 
     isGameOver(game : Game) {
         return this.game.gameResult != this.defaultGameResult;
+    }
+
+    gameOpponentExist(game : Game) {
+        return this.game.opponent != this.defaultOpponent;
     }
 }
 
