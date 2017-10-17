@@ -8,7 +8,7 @@ export class GameService {
     defaultOpponent : string = "";
     defaultGameResult : string = "?";
     defaultState : string = "ready";
-
+    gameInProcess : string = "playing";
 
     getGamesFromDb(){
         return window.localStorage.getItem("games");
@@ -50,13 +50,10 @@ export class GameService {
         let game = new Game (owner,this.defaultOpponent,size,Date.now(),Date.now(),this.defaultGameResult,this.defaultState);
   
         game.value = createMatrix(game.size);
-
         game.gameToken = generateGameToken(this.signsQuantityForGameToken);
         game.accessTokenPlayer1 = generateAccessToken();
 
-        //Якобы хэдэр с гейм токеном и аксесс токеном
-        window.localStorage.setItem("gameToken", game.gameToken);
-        window.localStorage.setItem("accessTokenPlayer1", game.accessTokenPlayer1);
+        setHeaders(game.gameToken, game.accessTokenPlayer1);
 
         //добавляем новую игру в спиcок игр
         let objectAllGames = this.getPasreGames();
@@ -74,16 +71,14 @@ export class GameService {
             if( !game.opponent ) { 
                 
                 game.opponent = user;
-
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
-
-                game.state = "playing";
+                game.state = this.gameInProcess;
                 game.lastActivitesTime = Date.now();
+
                 //добавляем изменения о игре
                 let objectAllGames = this.getPasreGames();
                 let newGameList : any = [];
-
                 objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
                     if(item.gameToken === game.gameToken) item = game;
                     newGameList.push(item);  
@@ -275,14 +270,14 @@ function createMatrix( size : number ){
     return arr;
 };
 
-function generateGameToken( signsNumber : number ) : string {
+function generateGameToken( signsQuantityForGameToken : number ) : string {
     let key : string = "";
     let keyAbc : string = "abcdefghijklmnopqrstuvwxyz";
     let key123 : string = "0123456789";
 
-    while(key.length < signsNumber)
+    while(key.length < signsQuantityForGameToken)
         key += keyAbc[Math.random() * keyAbc.length|0];
-    while(key.length < 2*signsNumber)
+    while(key.length < 2*signsQuantityForGameToken)
     key += key123[Math.random() * key123.length|0];
 
     return key;
@@ -297,3 +292,8 @@ function generateAccessToken() : string{
 
     return key;
 };
+
+function setHeaders(gameToken : string, accessTokenPlayer1 : string) {
+    window.localStorage.setItem("gameToken", gameToken);
+    window.localStorage.setItem("accessTokenPlayer1", accessTokenPlayer1);
+}
