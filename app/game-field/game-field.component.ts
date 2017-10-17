@@ -29,6 +29,7 @@ export class GameFieldComponent implements OnInit{
     defaultOpponent : string = "";
     roleX : string = "X";
     role0 : string = "0";
+    draw : string = "draw";
 
     constructor(
         private router: Router,
@@ -58,7 +59,7 @@ export class GameFieldComponent implements OnInit{
 
             if(this.isGameOver(this.game)) {
                 switch (this.game.gameResult) {
-                    case "draw":
+                    case this.draw:
                         alert('В этой игре никто не победил - Ничья');
                         this.router.navigate(['/']);
                         clearInterval(timerGame);
@@ -106,7 +107,7 @@ export class GameFieldComponent implements OnInit{
                     } else {
                         this.paintService.draw0(this.canvas,coordinateCellX,coordinateCellY);
                     }
-                    
+
                     this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
                 }
 
