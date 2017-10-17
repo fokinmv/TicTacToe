@@ -14,13 +14,22 @@ export class GameItemComponent implements OnInit{
     timer: number;
     winnerOwner: string;
     winnerOpponent: string;
+    winnerIndication: string = "Win";
 
     ngOnInit(){
-        if(this.game.gameResult == this.game.owner) this.winnerOwner = "Win";
-        if((this.game.opponent != "") && (this.game.gameResult == this.game.opponent)) this.winnerOpponent = "Win";
+        if(this.game.gameResult == this.game.owner) {
+            this.winnerOwner = this.winnerIndication;
+        }
+
+        if((this.game.opponent != "") && (this.game.gameResult == this.game.opponent)) {
+            this.winnerOpponent = this.winnerIndication;
+        }
         
-        //интервал для реализации таймера на иконке игры
-        setInterval(() => this.timer = Date.now() - this.game.gameCreateTime, 100);
+        setInterval(() => this.refreshGameTimerOnList(this.game), 100);
+    }
+
+    refreshGameTimerOnList(game : Game){
+        this.timer = Date.now() - this.game.gameCreateTime;
     }
 }
 

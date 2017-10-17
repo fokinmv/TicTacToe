@@ -1,6 +1,6 @@
-<div class = "player1">{{ game.owner }} {{ this.winnerOwner }}</div>
-<div class = "player2">{{ game.opponent }} {{ this.winnerOpponent }}</div>
+<div class = "player1">{{ this.game.owner }} {{ this.winnerOwner }}</div>
+<div class = "player2">{{ this.game.opponent }} {{ this.winnerOpponent }}</div>
 <div class = "footerGameItem">
-    <div class = "timer">{{ timer | date:'mm:ss' }}</div>
-    <div class = "size">Размер поля: {{ game.size }}</div>
+    <div class = "timer">{{ this.timer | date:'mm:ss' }}</div>
+    <div class = "size">Размер поля: {{ this.game.size }}</div>
 </div>

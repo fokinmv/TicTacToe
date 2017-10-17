@@ -13,13 +13,13 @@ import { PaintService } from '../shared/paint.service';
     styleUrls: ["./game-field.component.css"]
 })
 export class GameFieldComponent implements OnInit{
-    @ViewChild('gamePlace') public gamePlace:ElementRef;
-    private canvas: any;
+    @ViewChild('gamePlace') public gamePlace : ElementRef;
+    private canvas : any;
 
-    gameToken: any;
-    game: Game;
-    user: string;
-    timer: number;
+    gameToken : any;
+    game : Game;
+    user : string;
+    timer : number;
 
     ownerTurn: boolean | undefined = false;
     opponentTurn: boolean | undefined = false;
@@ -32,10 +32,10 @@ export class GameFieldComponent implements OnInit{
     draw : string = "draw";
 
     constructor(
-        private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private gameService: GameService,
-        private paintService: PaintService,
+        private router : Router,
+        private activatedRoute : ActivatedRoute,
+        private gameService : GameService,
+        private paintService : PaintService,
     ) 
     {
         this.getGameTokenFromUrl(activatedRoute);
@@ -91,7 +91,7 @@ export class GameFieldComponent implements OnInit{
         this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
     }
 
-    gameFieldClick(event: any) {
+    gameFieldClick(event : any) {
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
 
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
