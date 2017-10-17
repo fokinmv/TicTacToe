@@ -8,17 +8,23 @@ export class GameService {
         return window.localStorage.getItem("games");
     }
 
+    getPasreGames(){
+        let allGames: any = this.getGamesFromDb();
+        return JSON.parse(allGames);
+    }
+
     saveGamesFromDb( data : any ) : any {
         window.localStorage.setItem("games", JSON.stringify(data));
     }
 
     getGameList() {
         
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
 
-        if (objectAllGames == null) objectAllGames = [];
-
+        if (objectAllGames == null) {
+            objectAllGames = [];
+        }
+        
         //сортировка по state - сначала ready, потом playing, потом done
         objectAllGames.sort(function( a : any , b : any ){
             let c = a.state;
@@ -51,8 +57,7 @@ export class GameService {
         window.localStorage.setItem("accessTokenPlayer1", game.accessTokenPlayer1);
 
         //добавляем новую игру в спиcок игр
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
         if (objectAllGames == null) objectAllGames = [];
         objectAllGames.push(game);
 
@@ -72,8 +77,7 @@ export class GameService {
                 game.state = "playing";
                 game.lastActivitesTime = Date.now();
                 //добавляем изменения о игре
-                let allGames: any = this.getGamesFromDb();
-                let objectAllGames = JSON.parse(allGames);
+                let objectAllGames = this.getPasreGames();
                 let newGameList : any = [];
 
                 objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
@@ -88,8 +92,7 @@ export class GameService {
     }
 
     getGame( gameTokenFromUrl : any ) {
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
         let neededGameItem : any;
         
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
@@ -100,8 +103,7 @@ export class GameService {
     }
 
     saveGame( gameTokenFromUrl : any, game : Game) {
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
         let newGameList : any = [];
 
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
@@ -113,8 +115,7 @@ export class GameService {
     }
 
     deleteGame( gameTokenFromUrl : any ){
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
         let newGameList : any = [];
 
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
@@ -127,8 +128,7 @@ export class GameService {
 
     checkAndDeleteInactivityGamesByList() {
 
-        let allGames: any = this.getGamesFromDb();
-        let objectAllGames = JSON.parse(allGames);
+        let objectAllGames = this.getPasreGames();
 
         let timer10Min : number = 10*60*1000;
         let newGameList : any = [];
