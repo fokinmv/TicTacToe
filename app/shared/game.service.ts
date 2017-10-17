@@ -65,6 +65,18 @@ export class GameService {
         return game.gameToken;
     }
 
+    saveGameChanges( gameTokenFromUrl : any, game : Game) {
+        let objectAllGames = this.getPasreGames();
+        let newGameList : any = [];
+
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
+            if(item.gameToken == gameTokenFromUrl.gameToken) item = game;
+            newGameList.push(item);
+        });
+        
+        this.saveGamesFromDb(newGameList);
+    }
+
     joinGame( game : Game, user : string ){
         if( user ) {
             //Добавляем второго игрока
@@ -99,18 +111,6 @@ export class GameService {
         });
 
         return neededGameItem;
-    }
-
-    saveGame( gameTokenFromUrl : any, game : Game) {
-        let objectAllGames = this.getPasreGames();
-        let newGameList : any = [];
-
-        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-            if(item.gameToken == gameTokenFromUrl.gameToken) item = game;
-            newGameList.push(item);
-        });
-        
-        this.saveGamesFromDb(newGameList);
     }
 
     deleteGame( gameTokenFromUrl : any ){
@@ -148,7 +148,7 @@ export class GameService {
 
         game.state = "done";
 
-        this.saveGame(gameToken, game);
+        this.saveGameChanges(gameToken, game);
     }
 
     defineCell( coordinate : any, cellSize : number) {
@@ -165,7 +165,7 @@ export class GameService {
 
         game.lastActivitesTime = Date.now();
 
-        this.saveGame(gameToken, game);
+        this.saveGameChanges(gameToken, game);
 
     };
 
@@ -236,15 +236,15 @@ export class GameService {
             if(role == "0") game.gameResult = game.opponent;
             if((game.gameResult == game.owner) || (game.gameResult == game.opponent)) game.state = "done";
         }
-        this.saveGame(gameToken, game);
+        this.saveGameChanges(gameToken, game);
     };
 
     checkNullCell( gameToken : string ){
 
         let game  = this.getGame(gameToken);
         let matrix = game.value;
-
         let result = false;
+
         for(var i=0; i<game.size; i++){
             for(var j=0; j<game.size; j++){
                 if(matrix[i][j] == null) result = true;
@@ -254,7 +254,7 @@ export class GameService {
             game.gameResult = "draw";
             game.state = "done";
         }
-        this.saveGame(gameToken, game);
+        this.saveGameChanges(gameToken, game);
     };
 
 }
