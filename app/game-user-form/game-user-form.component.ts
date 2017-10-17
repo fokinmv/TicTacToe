@@ -19,17 +19,16 @@ export class GameUserForm {
         private gameService: GameService,
         private route: ActivatedRoute,
         private router: Router
-    ){
-    }
+    ) {}
 
     onSubmit() {
         let gameToken: string = this.gameService.createGame(this.user, this.size)
         this.router.navigate(
             ['/game', gameToken],
             {
-            queryParams : {
-                user : this.user
-            }
+                queryParams : {
+                    user : this.user
+                }
             }
         );
     }
