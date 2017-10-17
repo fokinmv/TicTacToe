@@ -134,19 +134,18 @@ export class GameService {
     }
 
     gameSurrender( gameToken : string, user : string ){
-        
         let game  = this.getGame(gameToken);
-        
+
         if(game.owner == user) {
             game.gameResult = game.opponent;
+            game.state = this.gameIsOver;
+            this.saveGameChanges(gameToken, game);
         }
         if(game.opponent == user) {
             game.gameResult = game.owner;
+            game.state = this.gameIsOver;
+            this.saveGameChanges(gameToken, game);
         }
-
-        game.state = this.gameIsOver;
-
-        this.saveGameChanges(gameToken, game);
     }
 
     enterValueCell( gameToken : string, x : number, y : number, role : string){
