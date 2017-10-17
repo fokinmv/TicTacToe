@@ -27,6 +27,8 @@ export class GameFieldComponent implements OnInit{
     timer5Min : number = 5*60*1000;
     defaultGameResult : string = "?";
     defaultOpponent : string = "";
+    roleX : string = "X";
+    role0 : string = "0";
 
     constructor(
         private router: Router,
@@ -90,25 +92,22 @@ export class GameFieldComponent implements OnInit{
 
     gameFieldClick(event: any) {
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
-
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
                 let coordinateCellX : number = this.gameService.defineCell(event.offsetX, this.paintService.cellSize);
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
-                
-                if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
-                    if (this.user == this.game.owner) {
-                        this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, 'X');
-                        this.paintService.drawX(this.canvas,coordinateCellX,coordinateCellY);
-                        this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, 'X');
-                    }
-                    if (this.user == this.game.opponent) {
-                        this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, '0');
-                        this.paintService.draw0(this.canvas,coordinateCellX,coordinateCellY);
-                        this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, '0');
-                    }
-                }
-                this.gameService.checkNullCell(this.gameToken);
 
+                if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
+                    let playerMarker = this.user == this.game.owner ? this.roleX : this.role0;
+                    this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
+                    if (this.user == this.game.owner) {
+                        this.paintService.drawX(this.canvas,coordinateCellX,coordinateCellY);
+                    } else {
+                        this.paintService.draw0(this.canvas,coordinateCellX,coordinateCellY);
+                    }
+                    this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
+                }
+
+                this.gameService.checkNullCell(this.gameToken);
             }
         }
     }
@@ -147,4 +146,3 @@ export class GameFieldComponent implements OnInit{
         return this.game.opponent != this.defaultOpponent;
     }
 }
-
