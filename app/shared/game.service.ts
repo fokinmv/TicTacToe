@@ -65,22 +65,10 @@ export class GameService {
         return game.gameToken;
     }
 
-    saveGameChanges( gameTokenFromUrl : any, game : Game) {
-        let objectAllGames = this.getPasreGames();
-        let newGameList : any = [];
-
-        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-            if(item.gameToken == gameTokenFromUrl.gameToken) item = game;
-            newGameList.push(item);
-        });
-        
-        this.saveGamesFromDb(newGameList);
-    }
-
     joinGame( game : Game, user : string ){
         if( user ) {
             //Добавляем второго игрока
-            if( !game.opponent ) { 
+            if( !game.opponent ) {
                 
                 game.opponent = user;
                 game.accessTokenPlayer2 = generateAccessToken();
@@ -89,17 +77,35 @@ export class GameService {
                 game.lastActivitesTime = Date.now();
 
                 //добавляем изменения о игре
+                /*
                 let objectAllGames = this.getPasreGames();
                 let newGameList : any = [];
                 objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
                     if(item.gameToken === game.gameToken) item = game;
                     newGameList.push(item);  
                 });
-                this.saveGamesFromDb(newGameList);
+                this.saveGamesFromDb(newGameList);*/
+                this.saveGame(game.gameToken, game);
             }
 
             return game.gameToken;
         }
+    }
+
+    saveGame( gameToken : any, game : Game) {
+        let objectAllGames = this.getPasreGames();
+        let newGameList : any = [];
+
+        objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
+            if(item.gameToken == gameToken) item = game;
+            newGameList.push(item);
+        });
+        
+        this.saveGamesFromDb(newGameList);
+    }
+
+    saveGameChanges( gameTokenFromUrl : any, game : Game) {
+        this.saveGame(gameTokenFromUrl.gameToken, game);
     }
 
     getGame( gameTokenFromUrl : any ) {
@@ -151,11 +157,6 @@ export class GameService {
         this.saveGameChanges(gameToken, game);
     }
 
-    defineCell( coordinate : any, cellSize : number) {
-        let cellNumber : number = Math.floor(coordinate/cellSize);
-        return cellNumber;
-    };
-
     enterValueCell( gameToken : string, x : number, y : number, role : string){
         
         let game  = this.getGame(gameToken);
@@ -166,7 +167,61 @@ export class GameService {
         game.lastActivitesTime = Date.now();
 
         this.saveGameChanges(gameToken, game);
+    };
 
+    checkNullCell( gameToken : string ){
+        
+        let game  = this.getGame(gameToken);
+        let matrix = game.value;
+        let result = false;
+        
+        for(var i=0; i<game.size; i++){
+            for(var j=0; j<game.size; j++){
+                if(matrix[i][j] == null) result = true;
+            }
+        }
+        if(result == false) {
+            game.gameResult = "draw";
+            game.state = "done";
+        }
+        this.saveGameChanges(gameToken, game);
+    };
+
+    checkWin( gameToken : string, x : number, y : number, role : string){
+        
+        let game  = this.getGame(gameToken);
+        let matrix = game.value;
+        
+        let size = game.size;
+        let win = false;
+        
+        //проверяем строки
+        if ((x - 2 >= 0 ) && (matrix[y][x - 2] == role) && (matrix[y][x - 1] == role) && (matrix[y][x] == role)) win = true;
+        if ((x - 1 >= 0 ) && (x + 1 < size ) && (matrix[y][x - 1] == role) && (matrix[y][x] == role) && (matrix[y][x + 1] == role)) win = true;
+        if ((x + 2 < size ) && (matrix[y][x] == role) && (matrix[y][x + 1] == role) && (matrix[y][x + 2] == role)) win = true;
+                
+        //проверяем столбцы
+        if ((y - 2 >= 0 ) && (matrix[y - 2][x] == role) && (matrix[y - 1][x] == role) && (matrix[y][x] == role)) win = true;
+        if ((y - 1 >= 0 ) && (y + 1 < size ) && (matrix[y - 1][x] == role) && (matrix[y][x] == role) && (matrix[y + 1][x] == role)) win = true;
+        if ((y + 2 < size ) && (matrix[y][x] == role) && (matrix[y + 1][x] == role) && (matrix[y + 2][x] == role)) win = true;
+        
+        //проверяем диагональ слева сверху в право вниз
+        if ((y - 2 >= 0 ) && (x - 2 >= 0 ) && (matrix[y - 2][x - 2] == role) && (matrix[y - 1][x - 1] == role) && (matrix[y][x] == role)) win = true;
+        if ((y - 1 >= 0 ) && (y + 1 < size ) && (x - 1 >= 0 )  && (x + 1 < size ) && (matrix[y - 1][x - 1] == role) && (matrix[y][x] == role) && (matrix[y + 1][x + 1] == role)) win = true;
+        if ((y + 2 < size ) && (x + 2 < size ) && (matrix[y][x] == role) && (matrix[y + 1][x + 1] == role) && (matrix[y + 2][x + 2] == role)) win = true;
+                
+        //проверяем диагональ слева снизу в право сверх
+        if ((y - 2 >= 0 ) && (x + 2 < size ) && (matrix[y -2][x + 2] == role) && (matrix[y - 1][x + 1] == role) && (matrix[y][x] == role)) win = true;
+        if ((y - 1 >= 0 ) && (y + 1 < size ) && (x - 1 >= 0 )  && (x + 1 < size ) && (matrix[y - 1][x + 1] == role) && (matrix[y][x] == role) && (matrix[y + 1][x - 1] == role)) win = true;
+        if ((y + 2 < size ) && (x - 2 >= 0 ) && (matrix[y][x] == role) && (matrix[y + 1][x - 1] == role) && (matrix[y + 2][x - 2] == role)) win = true;
+        
+        if(win) {
+            //если появился победитель вписываем его в gameResult и переводим статус игры в done
+            if(role == "X") game.gameResult = game.owner;
+            if(role == "0") game.gameResult = game.opponent;
+            if((game.gameResult == game.owner) || (game.gameResult == game.opponent)) game.state = "done";
+        }
+        this.saveGameChanges(gameToken, game);
     };
 
     checkCellValue( gameToken : string, x : number, y : number){
@@ -174,14 +229,12 @@ export class GameService {
         let game  = this.getGame(gameToken);
         let matrix = game.value;
         if (matrix[y][x] == null) return true;
-
     };
 
     checkAccess( gameToken : string, user : string) {
         
         let game  = this.getGame(gameToken);
         if((user===game.owner) || (user===game.opponent)) return true;
-
     }
 
     checkWhoTurn ( gameToken : string, user : string) : boolean | undefined {
@@ -202,61 +255,10 @@ export class GameService {
         
     }
 
-    checkWin( gameToken : string, x : number, y : number, role : string){
-
-        let game  = this.getGame(gameToken);
-        let matrix = game.value;
-
-        let size = game.size;
-        let win = false;
-
-        //проверяем строки
-        if ((x - 2 >= 0 ) && (matrix[y][x - 2] == role) && (matrix[y][x - 1] == role) && (matrix[y][x] == role)) win = true;
-        if ((x - 1 >= 0 ) && (x + 1 < size ) && (matrix[y][x - 1] == role) && (matrix[y][x] == role) && (matrix[y][x + 1] == role)) win = true;
-        if ((x + 2 < size ) && (matrix[y][x] == role) && (matrix[y][x + 1] == role) && (matrix[y][x + 2] == role)) win = true;
-        
-        //проверяем столбцы
-        if ((y - 2 >= 0 ) && (matrix[y - 2][x] == role) && (matrix[y - 1][x] == role) && (matrix[y][x] == role)) win = true;
-        if ((y - 1 >= 0 ) && (y + 1 < size ) && (matrix[y - 1][x] == role) && (matrix[y][x] == role) && (matrix[y + 1][x] == role)) win = true;
-        if ((y + 2 < size ) && (matrix[y][x] == role) && (matrix[y + 1][x] == role) && (matrix[y + 2][x] == role)) win = true;
-
-        //проверяем диагональ слева сверху в право вниз
-        if ((y - 2 >= 0 ) && (x - 2 >= 0 ) && (matrix[y - 2][x - 2] == role) && (matrix[y - 1][x - 1] == role) && (matrix[y][x] == role)) win = true;
-        if ((y - 1 >= 0 ) && (y + 1 < size ) && (x - 1 >= 0 )  && (x + 1 < size ) && (matrix[y - 1][x - 1] == role) && (matrix[y][x] == role) && (matrix[y + 1][x + 1] == role)) win = true;
-        if ((y + 2 < size ) && (x + 2 < size ) && (matrix[y][x] == role) && (matrix[y + 1][x + 1] == role) && (matrix[y + 2][x + 2] == role)) win = true;
-        
-        //проверяем диагональ слева снизу в право сверх
-        if ((y - 2 >= 0 ) && (x + 2 < size ) && (matrix[y -2][x + 2] == role) && (matrix[y - 1][x + 1] == role) && (matrix[y][x] == role)) win = true;
-        if ((y - 1 >= 0 ) && (y + 1 < size ) && (x - 1 >= 0 )  && (x + 1 < size ) && (matrix[y - 1][x + 1] == role) && (matrix[y][x] == role) && (matrix[y + 1][x - 1] == role)) win = true;
-        if ((y + 2 < size ) && (x - 2 >= 0 ) && (matrix[y][x] == role) && (matrix[y + 1][x - 1] == role) && (matrix[y + 2][x - 2] == role)) win = true;
-
-        if(win) {
-            //если появился победитель вписываем его в gameResult и переводим статус игры в done
-            if(role == "X") game.gameResult = game.owner;
-            if(role == "0") game.gameResult = game.opponent;
-            if((game.gameResult == game.owner) || (game.gameResult == game.opponent)) game.state = "done";
-        }
-        this.saveGameChanges(gameToken, game);
+    defineCell( coordinate : any, cellSize : number) {
+        let cellNumber : number = Math.floor(coordinate/cellSize);
+        return cellNumber;
     };
-
-    checkNullCell( gameToken : string ){
-
-        let game  = this.getGame(gameToken);
-        let matrix = game.value;
-        let result = false;
-
-        for(var i=0; i<game.size; i++){
-            for(var j=0; j<game.size; j++){
-                if(matrix[i][j] == null) result = true;
-            }
-        }
-        if(result == false) {
-            game.gameResult = "draw";
-            game.state = "done";
-        }
-        this.saveGameChanges(gameToken, game);
-    };
-
 }
 
 function createMatrix( size : number ){
