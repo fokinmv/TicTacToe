@@ -213,34 +213,47 @@ export class GameService {
     };
 
     checkCellValue( gameToken : string, x : number, y : number){
-
         let game  = this.getGame(gameToken);
         let matrix = game.value;
-        if (matrix[y][x] == null) return true;
+        if (matrix[y][x] == null) {
+            return true;
+        }
     };
 
     checkAccess( gameToken : string, user : string) {
-        
         let game  = this.getGame(gameToken);
-        if((user===game.owner) || (user===game.opponent)) return true;
+        if((user===game.owner) || (user===game.opponent)) {
+            return true;
+        }
     }
 
     checkWhoTurn ( gameToken : string, user : string) : boolean | undefined {
-
         let game  = this.getGame(gameToken);
         let matrix = game.value;
-        let counter:number = 0;
+        let counter : number = 0;
 
-        for(let i : number = 0; i<game.size; i++){
-            for(let j = 0; j < game.size; j++){
-                if (matrix[i][j] != null) counter++;
+        for(let i : number = 0; i<game.size; i++) {
+            for(let j = 0; j < game.size; j++) {
+                if (matrix[i][j] != null) {
+                    counter++;
+                }
             }
         }
-        //если число значений в поле 0 или четное и ходит player1, то ход крестиков
-        if ((counter % 2 == 0) && (user == game.owner)) return true;
-        //если число значений в поле нечетное и ходит player2, то ход ноликов
-        if ((counter % 2 != 0) && (user == game.opponent)) return true;
-        
+
+        if (this.isTurnOwner(counter, user, game)) {
+            return true;
+        }
+        if (this.isTurnOpponent(counter, user, game)) {
+            return true;
+        }
+    }
+
+    isTurnOwner(counter : number, user : string, game : Game) {
+        return ((counter % 2 == 0) && (user == game.owner));
+    }
+
+    isTurnOpponent(counter : number, user : string, game : Game) {
+        return ((counter % 2 != 0) && (user == game.opponent));
     }
 
     defineCell( coordinate : any, cellSize : number) {
