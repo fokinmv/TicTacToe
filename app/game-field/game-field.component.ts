@@ -92,6 +92,7 @@ export class GameFieldComponent implements OnInit{
 
     gameFieldClick(event: any) {
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
+
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
                 let coordinateCellX : number = this.gameService.defineCell(event.offsetX, this.paintService.cellSize);
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
@@ -99,11 +100,13 @@ export class GameFieldComponent implements OnInit{
                 if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
                     let playerMarker = this.user == this.game.owner ? this.roleX : this.role0;
                     this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
-                    if (this.user == this.game.owner) {
+
+                    if (this.isThisOwner(this.game)) {
                         this.paintService.drawX(this.canvas,coordinateCellX,coordinateCellY);
                     } else {
                         this.paintService.draw0(this.canvas,coordinateCellX,coordinateCellY);
                     }
+                    
                     this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
                 }
 
@@ -144,5 +147,9 @@ export class GameFieldComponent implements OnInit{
 
     gameOpponentExist(game : Game) {
         return this.game.opponent != this.defaultOpponent;
+    }
+
+    isThisOwner(game : Game) {
+        return this.user == this.game.owner;
     }
 }
