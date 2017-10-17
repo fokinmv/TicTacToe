@@ -17,11 +17,11 @@ export class GameItemComponent implements OnInit{
     winnerIndication: string = "Win";
 
     ngOnInit(){
-        if(this.game.gameResult == this.game.owner) {
+        if(this.isOwnerWin(this.game)) {
             this.winnerOwner = this.winnerIndication;
         }
 
-        if((this.game.opponent != "") && (this.game.gameResult == this.game.opponent)) {
+        if((this.game.opponent != "") && (this.isOpponentWin(this.game))) {
             this.winnerOpponent = this.winnerIndication;
         }
         
@@ -30,6 +30,14 @@ export class GameItemComponent implements OnInit{
 
     refreshGameTimerOnList(game : Game){
         this.timer = Date.now() - this.game.gameCreateTime;
+    }
+
+    isOwnerWin(game : Game){
+        return this.game.gameResult == this.game.owner;
+    }
+
+    isOpponentWin(game : Game){
+        return this.game.gameResult == this.game.opponent;
     }
 }
 
