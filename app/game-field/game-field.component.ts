@@ -42,10 +42,7 @@ export class GameFieldComponent implements OnInit{
         //обновляем каждые 2 секунды
         let timerGame = setInterval(() => {
             this.game = this.gameService.getGame(this.gameToken);
-
-            //для индикации - чей ход
-            this.ownerTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.owner);
-            this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent);
+            this.indicationWhoWillTurn(this.game);
 
             //проверяем, время с последней активности - если больше 5 минут - удаляем игру
             let timer5Min : number = 5*60*1000;
@@ -57,7 +54,7 @@ export class GameFieldComponent implements OnInit{
             }
 
             //проверяем, может игра закончилась 
-            if(this.game.gameResult != "?"){
+            if(this.game.gameResult != "?") {
                 switch (this.game.gameResult) {
                     case "draw":
                         alert('В этой игре никто не победил - Ничья');
@@ -91,7 +88,7 @@ export class GameFieldComponent implements OnInit{
         this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
     }
 
-    gameFieldClick(event: any){        
+    gameFieldClick(event: any) {
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
 
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
@@ -116,7 +113,7 @@ export class GameFieldComponent implements OnInit{
         }
     }
 
-    exit(){
+    exit() {
         this.gameService.gameSurrender(this.gameToken, this.user);
         this.router.navigate(['/']);
     }
@@ -129,8 +126,13 @@ export class GameFieldComponent implements OnInit{
         activatedRoute.queryParams.subscribe((params : any) => this.user = params.user);
     }
 
-    refreshGameTimer(game : Game){
+    refreshGameTimer(game : Game) {
         this.timer = Date.now() - this.game.gameCreateTime;
+    }
+
+    indicationWhoWillTurn(game : Game) {
+        this.ownerTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.owner);
+        this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent);
     }
 }
 
