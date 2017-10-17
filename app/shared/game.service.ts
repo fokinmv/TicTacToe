@@ -9,6 +9,7 @@ export class GameService {
     defaultGameResult : string = "?";
     defaultState : string = "ready";
     gameInProcess : string = "playing";
+    gameIsOver : string = "done";
 
     getGamesFromDb(){
         return window.localStorage.getItem("games");
@@ -84,7 +85,6 @@ export class GameService {
             }
             newGameList.push(item);
         });
-        
         this.saveGamesFromDb(newGameList);
     }
 
@@ -110,22 +110,24 @@ export class GameService {
         let newGameList : any = [];
 
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-            if(item.gameToken == gameTokenFromUrl.gameToken) return;
+            if(item.gameToken == gameTokenFromUrl.gameToken) {
+                return;
+            }
             newGameList.push(item);
         });
-
         this.saveGamesFromDb(newGameList);
     }
 
     checkAndDeleteInactivityGamesByList() {
-
         let objectAllGames = this.getPasreGames();
 
         let timer10Min : number = 10*60*1000;
         let newGameList : any = [];
 
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-           if((Date.now() - item.lastActivitesTime) < timer10Min) newGameList.push(item);
+           if((Date.now() - item.lastActivitesTime) < timer10Min) {
+               newGameList.push(item);
+            }
         });
 
         this.saveGamesFromDb(newGameList);
@@ -135,10 +137,14 @@ export class GameService {
         
         let game  = this.getGame(gameToken);
         
-        if(game.owner == user) game.gameResult = game.opponent;
-        if(game.opponent == user) game.gameResult = game.owner;
+        if(game.owner == user) {
+            game.gameResult = game.opponent;
+        }
+        if(game.opponent == user) {
+            game.gameResult = game.owner;
+        }
 
-        game.state = "done";
+        game.state = this.gameIsOver;
 
         this.saveGameChanges(gameToken, game);
     }
