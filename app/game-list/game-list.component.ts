@@ -44,32 +44,34 @@ export class GameListComponent {
     }
 
     ngAfterViewInit() : void {
-        //изменяем высоту блока и шрифт содержимого в зависимости от ширины блока одной игры
-        setInterval(() => {
-            let htmlBlockItemGame:HTMLElement|null = document.getElementById("oneGameArea");
-            
-            if (htmlBlockItemGame){
-                this.height = Math.round(htmlBlockItemGame.offsetWidth);
-                this.fontSize = Math.round(this.height/10);
-            }
-        },0);
+        setInterval(() => this.changeHeightAndFontSize(), 0);
     }
 
     join(game : Game) {
         let gameToken: any = this.gameService.joinGame(game, this.userName);
+        
         if(gameToken) {
             this.router.navigate(
-            ['/game', gameToken],
-            {
-                queryParams : {
-                    user : this.userName
+                ['/game', gameToken],
+                {
+                    queryParams : {
+                        user : this.userName
+                    }
                 }
-            }
             )
         }
     }
 
     gamesListNotEmpty(games : Game[]) {
         return this.games.length > 0;
+    }
+
+    changeHeightAndFontSize() {
+        let htmlBlockItemGame:HTMLElement|null = document.getElementById("oneGameArea");
+        
+        if (htmlBlockItemGame){
+            this.height = Math.round(htmlBlockItemGame.offsetWidth);
+            this.fontSize = Math.round(this.height/10);
+        }
     }
 }
