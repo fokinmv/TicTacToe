@@ -1,8 +1,11 @@
 import { Game } from './game.class';
 
 export class GameService {
-
     games: Game[] = [];
+    defaultOpponent : string = "";
+    defaultGameResult : string = "?";
+    defaultState : string = "ready";
+
 
     getGamesFromDb(){
         return window.localStorage.getItem("games");
@@ -18,14 +21,12 @@ export class GameService {
     }
 
     getGameList() {
-        
         let objectAllGames = this.getPasreGames();
 
         if (objectAllGames == null) {
             objectAllGames = [];
         }
-        
-        //сортировка по state - сначала ready, потом playing, потом done
+
         objectAllGames.sort(function( a : any , b : any ){
             let c = a.state;
             let d = b.state;
@@ -36,15 +37,14 @@ export class GameService {
                     return -1;
                 }
                 return 0;
-            })
+            }
+        )
 
-        this.games = objectAllGames;
-
-        return this.games;
+        return objectAllGames;
     }
 
     createGame( owner : string, size : number ){
-        let game = new Game (owner,"",size,Date.now(),Date.now(),"?","ready");
+        let game = new Game (owner,this.defaultOpponent,size,Date.now(),Date.now(),this.defaultGameResult,this.defaultState);
   
         game.value = createMatrix(game.size);
 
@@ -69,7 +69,9 @@ export class GameService {
     joinGame( game : Game, user : string ){
         if( user ) {
             //Добавляем второго игрока
-            if( !game.opponent ) { game.opponent = user;
+            if( !game.opponent ) { 
+                
+                game.opponent = user;
 
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
