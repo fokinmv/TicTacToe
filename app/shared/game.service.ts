@@ -10,6 +10,7 @@ export class GameService {
     defaultState : string = "ready";
     gameInProcess : string = "playing";
     gameIsOver : string = "done";
+    drawInGame : string = "draw";
 
     getGamesFromDb(){
         return window.localStorage.getItem("games");
@@ -149,19 +150,14 @@ export class GameService {
     }
 
     enterValueCell( gameToken : string, x : number, y : number, role : string){
-        
         let game  = this.getGame(gameToken);
-
         let matrix = game.value;        
-        matrix[y][x] = role;//x и y наоборот, так как в матрице первый индекс по вертикали, второй по горизонтали
-
+        matrix[y][x] = role;
         game.lastActivitesTime = Date.now();
-
         this.saveGameChanges(gameToken, game);
     };
 
     checkNullCell( gameToken : string ){
-        
         let game  = this.getGame(gameToken);
         let matrix = game.value;
         let result = false;
@@ -171,9 +167,10 @@ export class GameService {
                 if(matrix[i][j] == null) result = true;
             }
         }
+
         if(result == false) {
-            game.gameResult = "draw";
-            game.state = "done";
+            game.gameResult = this.drawInGame;
+            game.state = this.gameIsOver;
         }
         this.saveGameChanges(gameToken, game);
     };
