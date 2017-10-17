@@ -31,10 +31,8 @@ export class GameFieldComponent implements OnInit{
         private paintService: PaintService,
     ) 
     {
-        //получаем gameToken из URL'а
-        activatedRoute.params.subscribe(param => this.gameToken = param);
-        //получаем User'а из URL'а
-        activatedRoute.queryParams.subscribe(params => this.user = params.user);
+        this.getGameTokenFromUrl(activatedRoute);
+        this.getUserFromQueryParams(activatedRoute);
     }
     ngOnInit(){
         this.game = this.gameService.getGame(this.gameToken);
@@ -121,4 +119,13 @@ export class GameFieldComponent implements OnInit{
         this.gameService.gameSurrender(this.gameToken, this.user);
         this.router.navigate(['/']);
     }
+
+    getGameTokenFromUrl(activatedRoute : any) {
+        activatedRoute.params.subscribe((param : any) => this.gameToken = param);
+    }
+
+    getUserFromQueryParams(activatedRoute : any) {
+        activatedRoute.queryParams.subscribe((params : any) => this.user = params.user);
+    }
 }
+
