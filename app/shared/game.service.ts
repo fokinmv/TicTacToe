@@ -67,7 +67,7 @@ export class GameService {
 
     joinGame( game : Game, user : string ) {
         if( user ) {
-            if(this.isOpponentEmpty(game)) {
+            if((this.isOpponentEmpty(game)) && (this.gameIsNotOver(game))) {
                 game.opponent = user;
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
@@ -142,8 +142,10 @@ export class GameService {
         let game  = this.getGame(gameToken);
 
         if(game.owner == user) {
-            game.gameResult = game.opponent;
             game.state = this.gameIsOver;
+            if (!this.isOpponentEmpty(game)) {
+                game.gameResult = game.opponent;
+            }
             this.saveGameChanges(gameToken, game);
         }
         if(game.opponent == user) {
@@ -256,6 +258,10 @@ export class GameService {
 
     isOpponentEmpty(game : Game) {
         return game.opponent == this.defaultOpponent;
+    };
+
+    gameIsNotOver(game : Game) {
+        return game.state != this.gameIsOver;
     };
 
     checkWinRow(matrix : any, x : number, y : number, size : number, role : string) {

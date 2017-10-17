@@ -80,6 +80,7 @@ export class GameFieldComponent implements OnInit{
                         break;
                 }       
             }
+            
             this.paintService.drawGameTable(this.canvas, this.game.size);
             this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
         }, 2000);
