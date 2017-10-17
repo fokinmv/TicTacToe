@@ -17,9 +17,6 @@ export class GameListComponent {
     games: Game[];
     @Input() userName: string;
 
-    height:number = 290;
-    fontSize:number = 29;
-
     constructor(
         private gameService: GameService,
         private route: ActivatedRoute,
