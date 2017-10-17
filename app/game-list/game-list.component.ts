@@ -12,18 +12,18 @@ import { GameService } from '../shared/game.service';
 })
 
 export class GameListComponent {
-    @ViewChild('oneGameArea') oneGameArea:ElementRef;
+    @ViewChild('oneGameArea') oneGameArea : ElementRef;
 
-    games: Game[];
-    @Input() userName: string;
+    games : Game[];
+    @Input() userName : string;
 
     height : number;
     fontSize : number;
 
     constructor(
-        private gameService: GameService,
-        private route: ActivatedRoute,
-        private router: Router)
+        private gameService : GameService,
+        private route : ActivatedRoute,
+        private router : Router)
     {
         this.games = [];
     }
@@ -36,15 +36,18 @@ export class GameListComponent {
         this.games = this.gameService.getGameList();
         setInterval(() => {
             this.games = this.gameService.getGameList();
-            //проверять и удалять игры с бездействием 10 минут только если есть хотя бы одна игра
-            if(this.games.length > 0) this.gameService.checkAndDeleteInactivityGamesByList();
+
+            if(this.gamesListNotEmpty(this.games)) {
+                this.gameService.checkAndDeleteInactivityGamesByList();
+            }
         }, 2000);
     }
 
-    ngAfterViewInit(): void {
+    ngAfterViewInit() : void {
         //изменяем высоту блока и шрифт содержимого в зависимости от ширины блока одной игры
         setInterval(() => {
             let htmlBlockItemGame:HTMLElement|null = document.getElementById("oneGameArea");
+            
             if (htmlBlockItemGame){
                 this.height = Math.round(htmlBlockItemGame.offsetWidth);
                 this.fontSize = Math.round(this.height/10);
@@ -52,7 +55,7 @@ export class GameListComponent {
         },0);
     }
 
-    join(game: Game) {
+    join(game : Game) {
         let gameToken: any = this.gameService.joinGame(game, this.userName);
         if(gameToken) {
             this.router.navigate(
@@ -64,5 +67,9 @@ export class GameListComponent {
             }
             )
         }
+    }
+
+    gamesListNotEmpty(games : Game[]) {
+        return this.games.length > 0;
     }
 }
