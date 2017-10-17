@@ -2,6 +2,9 @@ import { Game } from './game.class';
 
 export class GameService {
     games: Game[] = [];
+
+    signsQuantityForGameToken : number = 3;
+
     defaultOpponent : string = "";
     defaultGameResult : string = "?";
     defaultState : string = "ready";
@@ -48,8 +51,7 @@ export class GameService {
   
         game.value = createMatrix(game.size);
 
-        let signsNumber = 3;
-        game.gameToken = generateGameToken(signsNumber);
+        game.gameToken = generateGameToken(this.signsQuantityForGameToken);
         game.accessTokenPlayer1 = generateAccessToken();
 
         //Якобы хэдэр с гейм токеном и аксесс токеном
