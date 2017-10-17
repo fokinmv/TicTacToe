@@ -89,9 +89,7 @@ export class GameFieldComponent implements OnInit{
 
     ngAfterViewInit() {
         this.canvas = this.gamePlace.nativeElement;
-        //рисуем игровое поле
         this.paintService.drawGameTable(this.canvas, this.game.size);
-        //рисовать крестики/нолики, если есть в поле такие
         this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
     }
 
@@ -99,9 +97,6 @@ export class GameFieldComponent implements OnInit{
         if(this.gameService.checkAccess(this.gameToken, this.user)) {
 
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
-                console.log("Ваш ход");
-
-                // определяем координаты ячейку, куда ткнули
                 let coordinateCellX : number = this.gameService.defineCell(event.offsetX, this.paintService.cellSize);
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
                 
@@ -117,14 +112,12 @@ export class GameFieldComponent implements OnInit{
                         this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, '0');
                     }
                 }
-                //проверка наличия пустых клеток, вдруг ничья
                 this.gameService.checkNullCell(this.gameToken);
 
-            } else console.log("Сейчас не ваш ход!");
-        } else console.log("На игровое поле нажал НАБЛЮДАТЕЛЬ");
+            }
+        }
     }
     exit(){
-        console.log("ВЫХОД");
         this.gameService.gameSurrender(this.gameToken, this.user);
         this.router.navigate(['/']);
     }
