@@ -17,7 +17,7 @@
     </canvas>
         
     <div class = "timer">
-        {{ timer | date:'mm:ss' }}
+        {{ this.timer | date:'mm:ss' }}
     </div>
                 
     <button (click) = "exit()" type = "submit" class = "surrender">

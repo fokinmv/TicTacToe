@@ -34,10 +34,10 @@ export class GameFieldComponent implements OnInit{
         this.getGameTokenFromUrl(activatedRoute);
         this.getUserFromQueryParams(activatedRoute);
     }
+
     ngOnInit(){
         this.game = this.gameService.getGame(this.gameToken);
-        //таймер для обновления времени          
-        setInterval(() => this.timer = Date.now() - this.game.gameCreateTime, 100);
+        setInterval(() => this.refreshGameTimer(this.game), 100);
 
         //обновляем каждые 2 секунды
         let timerGame = setInterval(() => {
@@ -115,6 +115,7 @@ export class GameFieldComponent implements OnInit{
             }
         }
     }
+
     exit(){
         this.gameService.gameSurrender(this.gameToken, this.user);
         this.router.navigate(['/']);
@@ -126,6 +127,10 @@ export class GameFieldComponent implements OnInit{
 
     getUserFromQueryParams(activatedRoute : any) {
         activatedRoute.queryParams.subscribe((params : any) => this.user = params.user);
+    }
+
+    refreshGameTimer(game : Game){
+        this.timer = Date.now() - this.game.gameCreateTime;
     }
 }
 
