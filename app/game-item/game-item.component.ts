@@ -15,13 +15,14 @@ export class GameItemComponent implements OnInit{
     winnerOwner: string;
     winnerOpponent: string;
     winnerIndication: string = "Win";
+    defaultOpponent : string = "";
 
     ngOnInit(){
         if(this.isOwnerWin(this.game)) {
             this.winnerOwner = this.winnerIndication;
         }
 
-        if((this.game.opponent != "") && (this.isOpponentWin(this.game))) {
+        if((this.isGameOpponentExist(this.game)) && (this.isOpponentWin(this.game))) {
             this.winnerOpponent = this.winnerIndication;
         }
         
@@ -38,6 +39,10 @@ export class GameItemComponent implements OnInit{
 
     isOpponentWin(game : Game){
         return this.game.gameResult == this.game.opponent;
+    }
+
+    isGameOpponentExist(game : Game) {
+        return this.game.opponent != this.defaultOpponent;
     }
 }
 

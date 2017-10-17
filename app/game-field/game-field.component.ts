@@ -72,7 +72,7 @@ export class GameFieldComponent implements OnInit{
                         break;
 
                     case this.game.opponent:
-                        if (this.gameOpponentExist(this.game)) {
+                        if (this.isGameOpponentExist(this.game)) {
                             alert('В этой игре победил игрок ' + this.game.gameResult);
                         }
                         this.router.navigate(['/']);
@@ -146,7 +146,7 @@ export class GameFieldComponent implements OnInit{
         return this.game.gameResult != this.defaultGameResult;
     }
 
-    gameOpponentExist(game : Game) {
+    isGameOpponentExist(game : Game) {
         return this.game.opponent != this.defaultOpponent;
     }
 
