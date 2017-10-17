@@ -23,7 +23,9 @@ export class GameFieldComponent implements OnInit{
 
     ownerTurn: boolean | undefined = false;
     opponentTurn: boolean | undefined = false;
-    
+
+    timer5Min : number = 5*60*1000;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -44,9 +46,7 @@ export class GameFieldComponent implements OnInit{
             this.game = this.gameService.getGame(this.gameToken);
             this.indicationWhoWillTurn(this.game);
 
-            //проверяем, время с последней активности - если больше 5 минут - удаляем игру
-            let timer5Min : number = 5*60*1000;
-            if ((Date.now() - this.game.lastActivitesTime) > timer5Min) {
+            if (this.checkLastActivitesTime(this.game)) {
                 this.gameService.deleteGame(this.gameToken);
                 alert('Игра закрыта из-за бездействия игроков более 5 минут');
                 this.router.navigate(['/']);
@@ -133,6 +133,10 @@ export class GameFieldComponent implements OnInit{
     indicationWhoWillTurn(game : Game) {
         this.ownerTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.owner);
         this.opponentTurn = this.gameService.checkWhoTurn(this.gameToken, this.game.opponent);
+    }
+
+    checkLastActivitesTime(game : Game) {
+        return (Date.now() - this.game.lastActivitesTime) > this.timer5Min;
     }
 }
 
