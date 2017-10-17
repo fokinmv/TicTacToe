@@ -25,6 +25,7 @@ export class GameFieldComponent implements OnInit{
     opponentTurn: boolean | undefined = false;
 
     timer5Min : number = 5*60*1000;
+    defaultGameResult : string = "?";
 
     constructor(
         private router: Router,
@@ -41,7 +42,6 @@ export class GameFieldComponent implements OnInit{
         this.game = this.gameService.getGame(this.gameToken);
         setInterval(() => this.refreshGameTimer(this.game), 100);
 
-        //обновляем каждые 2 секунды
         let timerGame = setInterval(() => {
             this.game = this.gameService.getGame(this.gameToken);
             this.indicationWhoWillTurn(this.game);
@@ -53,8 +53,7 @@ export class GameFieldComponent implements OnInit{
                 clearInterval(timerGame);
             }
 
-            //проверяем, может игра закончилась 
-            if(this.game.gameResult != "?") {
+            if(this.isGameOver(this.game)) {
                 switch (this.game.gameResult) {
                     case "draw":
                         alert('В этой игре никто не победил - Ничья');
@@ -137,6 +136,10 @@ export class GameFieldComponent implements OnInit{
 
     checkLastActivitesTime(game : Game) {
         return (Date.now() - this.game.lastActivitesTime) > this.timer5Min;
+    }
+
+    isGameOver(game : Game) {
+        return this.game.gameResult != this.defaultGameResult;
     }
 }
 
