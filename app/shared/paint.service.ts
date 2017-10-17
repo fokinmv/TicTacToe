@@ -21,6 +21,9 @@ export class PaintService {
                 this.canvas.height = gameSize*this.cellSize + 1;
 
                 let widthTable: number = gameSize*this.cellSize;
+
+                ctx.clearRect(0,0,widthTable,widthTable);
+                
                 ctx.strokeRect(0,0,widthTable,widthTable);
 
                 for (let i: number = 0; i < gameSize; i++)
