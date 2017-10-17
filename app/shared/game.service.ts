@@ -16,7 +16,11 @@ export class GameService {
 
     getPasreGames(){
         let allGames: any = this.getGamesFromDb();
-        return JSON.parse(allGames);
+        let objectAllGames = JSON.parse(allGames)
+        if (objectAllGames == null) {
+            objectAllGames = [];
+        }
+        return objectAllGames;
     }
 
     saveGamesFromDb( data : any ) : any {
@@ -25,11 +29,6 @@ export class GameService {
 
     getGameList() {
         let objectAllGames = this.getPasreGames();
-
-        if (objectAllGames == null) {
-            objectAllGames = [];
-        }
-
         objectAllGames.sort(function( a : any , b : any ){
             let c = a.state;
             let d = b.state;
@@ -42,11 +41,10 @@ export class GameService {
                 return 0;
             }
         )
-
         return objectAllGames;
     }
 
-    createGame( owner : string, size : number ){
+    createGame( owner : string, size : number ) {
         let game = new Game (owner,this.defaultOpponent,size,Date.now(),Date.now(),this.defaultGameResult,this.defaultState);
   
         game.value = createMatrix(game.size);
@@ -55,39 +53,23 @@ export class GameService {
 
         setHeaders(game.gameToken, game.accessTokenPlayer1);
 
-        //добавляем новую игру в спиcок игр
         let objectAllGames = this.getPasreGames();
-        if (objectAllGames == null) objectAllGames = [];
         objectAllGames.push(game);
-
         this.saveGamesFromDb(objectAllGames);
-
         return game.gameToken;
     }
 
-    joinGame( game : Game, user : string ){
+    joinGame( game : Game, user : string ) {
         if( user ) {
-            //Добавляем второго игрока
-            if( !game.opponent ) {
-                
+            if(this.isOpponentEmpty(game)) {
                 game.opponent = user;
                 game.accessTokenPlayer2 = generateAccessToken();
                 window.localStorage.setItem("accessTokenPlayer2", game.accessTokenPlayer2);
                 game.state = this.gameInProcess;
                 game.lastActivitesTime = Date.now();
 
-                //добавляем изменения о игре
-                /*
-                let objectAllGames = this.getPasreGames();
-                let newGameList : any = [];
-                objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-                    if(item.gameToken === game.gameToken) item = game;
-                    newGameList.push(item);  
-                });
-                this.saveGamesFromDb(newGameList);*/
                 this.saveGame(game.gameToken, game);
             }
-
             return game.gameToken;
         }
     }
@@ -97,7 +79,9 @@ export class GameService {
         let newGameList : any = [];
 
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-            if(item.gameToken == gameToken) item = game;
+            if(item.gameToken == gameToken) {
+                item = game;
+            }
             newGameList.push(item);
         });
         
@@ -113,7 +97,9 @@ export class GameService {
         let neededGameItem : any;
         
         objectAllGames.forEach(function( item : Game, i : number, arr : any[]){
-            if(item.gameToken == gameTokenFromUrl.gameToken) neededGameItem = item;
+            if(item.gameToken == gameTokenFromUrl.gameToken) {
+                neededGameItem = item;
+            }
         });
 
         return neededGameItem;
@@ -258,6 +244,10 @@ export class GameService {
     defineCell( coordinate : any, cellSize : number) {
         let cellNumber : number = Math.floor(coordinate/cellSize);
         return cellNumber;
+    };
+
+    isOpponentEmpty(game : Game) {
+        return game.opponent == this.defaultOpponent;
     };
 }
 
