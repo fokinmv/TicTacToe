@@ -1,7 +1,7 @@
 <form (ngSubmit) = "onSubmit()" #createForm = "ngForm">
     <div class = "row vertical-align">
 
-        <input type = "text" class = "inputName col-xs-12 col-sm-5 col-md-3 col-lg-4" placeholder = "Введите имя" required [(ngModel)] = "user" name = "user">
+        <input type = "text" class = "inputName col-xs-12 col-sm-5 col-md-3 col-lg-4" placeholder = "Введите имя" required pattern="^[\S][а-яА-Яa-zA-Z0-9_-\s]{1,}" maxlength="15" [(ngModel)] = "user" name = "user">
 
         <select class = "selectSize col-xs-4 col-sm-2 col-md-1 col-lg-1" [(ngModel)] = "size" name = "size">
             <option *ngFor = "let size_i of sizes" [value]="size_i">{{size_i}}</option>

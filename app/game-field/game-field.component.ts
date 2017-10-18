@@ -51,9 +51,9 @@ export class GameFieldComponent implements OnInit{
             this.indicationWhoWillTurn(this.game);
 
             if (this.checkLastActivitesTime(this.game)) {
-                this.gameService.deleteGame(this.gameToken);
                 alert('Игра закрыта из-за бездействия игроков более 5 минут');
                 this.router.navigate(['/']);
+                this.gameService.deleteGame(this.gameToken);
                 clearInterval(timerGame);
             }
 

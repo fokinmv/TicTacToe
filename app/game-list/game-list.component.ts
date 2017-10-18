@@ -17,6 +17,8 @@ export class GameListComponent {
     games : Game[];
     @Input() userName : string;
 
+    regularExpression :any = /^[\S][а-яёa-z0-9_-\s]{0,}/i;
+
     height : number;
     fontSize : number;
 
@@ -48,17 +50,18 @@ export class GameListComponent {
     }
 
     join(game : Game) {
-        let gameToken: any = this.gameService.joinGame(game, this.userName);
-        
-        if(gameToken) {
-            this.router.navigate(
-                ['/game', gameToken],
-                {
-                    queryParams : {
-                        user : this.userName
+        if(this.userName.match(this.regularExpression)){
+            let gameToken: any = this.gameService.joinGame(game, this.userName);
+            if(gameToken) {
+                this.router.navigate(
+                    ['/game', gameToken],
+                    {
+                        queryParams : {
+                            user : this.userName
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 
