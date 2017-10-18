@@ -1,5 +1,5 @@
 {
-  "name": "newgamexo",
+  "name": "tictactoe",
   "version": "1.0.0",
   "scripts": {
     "clean": "gulp clean",
@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.31",
+    "browserify": "^14.4.0",
     "concurrently": "^3.5.0",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
@@ -52,11 +53,14 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-tslint": "^8.1.2",
     "gulp-typescript": "^3.2.2",
+    "gulp-typescript-compiler": "^1.0.1",
     "lite-server": "^2.3.0",
     "systemjs-builder": "^0.16.11",
     "ts-node": "^3.3.0",
+    "tsify": "^3.0.3",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3",
-    "typings": "^2.1.1"
+    "typings": "^2.1.1",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
