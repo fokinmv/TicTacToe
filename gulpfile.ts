@@ -28,6 +28,15 @@ gulp.task('build-html', function () {
         .pipe(gulp.dest('build/'));
 });
 
-gulp.task('default', ['clean','build-html','build-css'], () => {
+gulp.task('compile', function () {
+    return gulp.src(['app/**/*.ts','!node_modules/**/*.ts'])
+        .pipe(typescript({
+            noImplicitAny: true,
+            outFile: 'output.js'
+        }))
+        .pipe(gulp.dest('built/'));
+});
+
+gulp.task('default', ['clean','build-html','build-css','compile'], () => {
     console.log("Building the project ...");
 });
