@@ -2,6 +2,9 @@
   "name": "newgamexo",
   "version": "1.0.0",
   "scripts": {
+    "clean": "gulp clean",
+    "compile": "gulp compile",
+    "build": "gulp build",
     "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
     "lite": "lite-server",
     "tsc": "tsc",
@@ -9,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fokinmv/newGameXO.git"
+    "url": "git+https://github.com/fokinmv/TicTacToe.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fokinmv/newGameXO/issues"
+    "url": "https://github.com/fokinmv/TicTacToe/issues"
   },
-  "homepage": "https://github.com/fokinmv/newGameXO#readme",
+  "homepage": "https://github.com/fokinmv/TicTacToe#readme",
   "dependencies": {
     "@angular/common": "^4.4.3",
     "@angular/compiler": "^4.4.3",
@@ -40,8 +43,19 @@
   "devDependencies": {
     "@types/node": "^8.0.31",
     "concurrently": "^3.5.0",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-tslint": "^8.1.2",
+    "gulp-typescript": "^3.2.2",
     "lite-server": "^2.3.0",
     "systemjs-builder": "^0.16.11",
+    "ts-node": "^3.3.0",
+    "tslint": "^5.7.0",
     "typescript": "^2.5.3",
     "typings": "^2.1.1"
   }
