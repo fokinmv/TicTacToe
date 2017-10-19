@@ -1,4 +1,5 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "noImplicitAny": true,
     "noEmitOnError": true,
@@ -10,7 +11,10 @@
     "strict": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "lib": ["es2015", "dom"],
+    "noStrictGenericChecks": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "gulpfile.ts",

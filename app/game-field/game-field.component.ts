@@ -12,7 +12,7 @@ import { PaintService } from '../shared/paint.service';
     templateUrl: "./game-field.component.html",
     styleUrls: ["./game-field.component.css"]
 })
-export class GameFieldComponent implements OnInit{
+export class GameFieldComponent implements OnInit {
     @ViewChild('gamePlace') public gamePlace : ElementRef;
     private canvas : any;
 
@@ -24,7 +24,7 @@ export class GameFieldComponent implements OnInit{
     ownerTurn: boolean | undefined = false;
     opponentTurn: boolean | undefined = false;
 
-    timer5Min : number = 5*60*1000;
+    timer5Min : number = 5 * 60 * 1000;
     defaultGameResult : string = "?";
     defaultOpponent : string = "";
     roleX : string = "X";
@@ -36,13 +36,13 @@ export class GameFieldComponent implements OnInit{
         private activatedRoute : ActivatedRoute,
         private gameService : GameService,
         private paintService : PaintService,
-    ) 
+    )
     {
         this.getGameTokenFromUrl(activatedRoute);
         this.getUserFromQueryParams(activatedRoute);
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.game = this.gameService.getGame(this.gameToken);
         setInterval(() => this.refreshGameTimer(this.game), 100);
 
@@ -78,9 +78,9 @@ export class GameFieldComponent implements OnInit{
                         this.router.navigate(['/']);
                         clearInterval(timerGame);
                         break;
-                }       
+                }
             }
-            
+
             this.paintService.drawGameTable(this.canvas, this.game.size);
             this.paintService.drawX0(this.canvas, this.game.value, this.game.size);
         }, 2000);
@@ -100,7 +100,7 @@ export class GameFieldComponent implements OnInit{
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
 
                 if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
-                    let playerMarker = this.user == this.game.owner ? this.roleX : this.role0;
+                    let playerMarker = this.user === this.game.owner ? this.roleX : this.role0;
                     this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
 
                     if (this.isThisOwner(this.game)) {
@@ -144,14 +144,14 @@ export class GameFieldComponent implements OnInit{
     }
 
     isGameOver(game : Game) {
-        return this.game.gameResult != this.defaultGameResult;
+        return this.game.gameResult !== this.defaultGameResult;
     }
 
     isGameOpponentExist(game : Game) {
-        return this.game.opponent != this.defaultOpponent;
+        return this.game.opponent !== this.defaultOpponent;
     }
 
     isThisOwner(game : Game) {
-        return this.user == this.game.owner;
+        return this.user === this.game.owner;
     }
 }
