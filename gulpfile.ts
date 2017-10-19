@@ -8,12 +8,11 @@ const uglify = require("gulp-uglify");
 const htmlmin = require("gulp-htmlmin");
 const del = require("del");
 
-const tsc  = require('gulp-typescript-compiler');
+//const tsc  = require('gulp-typescript-compiler');
+//const ts = require("gulp-typescript");
+//const tsProject = ts.createProject("tsconfig.json");
+//const tscConfig = require('./tsconfig.json');
 
-const ts = require("gulp-typescript");
-const tsProject = ts.createProject("tsconfig.json");
-
-const tscConfig = require('./tsconfig.json');
 const sourcemaps = require('gulp-sourcemaps');
 const buffer = require('vinyl-buffer');
 
@@ -70,7 +69,7 @@ gulp.task('compile', function () {
         //.pipe(gulp.dest("build/"))
 //});
 
-gulp.task('compile', ['clean'], function () {
+gulp.task('compile', function () {
     return browserify({
         basedir: '.',
         debug: true,
@@ -88,6 +87,11 @@ gulp.task('compile', ['clean'], function () {
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('default', ['clean','build-html','build-css','compile'], () => {
+gulp.task('resources', () => {
+    return gulp.src(['app/shared/**/*','!**/*.ts','!**/*.js','!**/*.html','!**/*.css'])
+        .pipe(gulp.dest('build/app/shared/'));
+});
+
+gulp.task('default', ['compile', 'build-html', 'build-css', 'resources'], () => {
     console.log("Building the project ...");
 });
