@@ -11,10 +11,10 @@ import { GameService } from '../shared/game.service';
 })
 export class GameUserForm {
     size: number = 3;
-    sizes: number[] = [3,4,5,6,7,8,9];
-    
+    sizes: number[] = [3, 4, 5, 6, 7, 8, 9];
+
     @Output() user: string = this.user;
-    
+
     constructor(
         private gameService: GameService,
         private route: ActivatedRoute,
@@ -22,7 +22,7 @@ export class GameUserForm {
     ) {}
 
     onSubmit() {
-        let gameToken: string = this.gameService.createGame(this.user, this.size)
+        let gameToken: string = this.gameService.createGame(this.user, this.size);
         this.router.navigate(
             ['/game', gameToken],
             {

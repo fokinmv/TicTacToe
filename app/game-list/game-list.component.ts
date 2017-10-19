@@ -22,11 +22,13 @@ export class GameListComponent {
     height : number;
     fontSize : number;
 
+    proportionFontSize : number = 10;
+
     constructor(
         private gameService : GameService,
         private route : ActivatedRoute,
-        private router : Router)
-    {
+        private router : Router
+    ) {
         this.games = [];
     }
 
@@ -39,7 +41,7 @@ export class GameListComponent {
         setInterval(() => {
             this.games = this.gameService.getGameList();
 
-            if(this.gamesListNotEmpty(this.games)) {
+            if (this.gamesListNotEmpty(this.games)) {
                 this.gameService.checkAndDeleteInactivityGamesByList();
             }
         }, 2000);
@@ -50,9 +52,9 @@ export class GameListComponent {
     }
 
     join(game : Game) {
-        if(this.userName.match(this.regularExpression)){
+        if (this.userName.match(this.regularExpression)) {
             let gameToken: any = this.gameService.joinGame(game, this.userName);
-            if(gameToken) {
+            if (gameToken) {
                 this.router.navigate(
                     ['/game', gameToken],
                     {
@@ -60,7 +62,7 @@ export class GameListComponent {
                             user : this.userName
                         }
                     }
-                )
+                );
             }
         }
     }
@@ -71,10 +73,10 @@ export class GameListComponent {
 
     changeHeightAndFontSize() {
         let htmlBlockItemGame:HTMLElement|null = document.getElementById("oneGameArea");
-        
-        if (htmlBlockItemGame){
+
+        if (htmlBlockItemGame) {
             this.height = Math.round(htmlBlockItemGame.offsetWidth);
-            this.fontSize = Math.round(this.height/10);
+            this.fontSize = Math.round(this.height / this.proportionFontSize);
         }
     }
 }

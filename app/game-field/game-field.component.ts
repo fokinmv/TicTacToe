@@ -36,8 +36,7 @@ export class GameFieldComponent implements OnInit {
         private activatedRoute : ActivatedRoute,
         private gameService : GameService,
         private paintService : PaintService,
-    )
-    {
+    ) {
         this.getGameTokenFromUrl(activatedRoute);
         this.getUserFromQueryParams(activatedRoute);
     }
@@ -57,7 +56,7 @@ export class GameFieldComponent implements OnInit {
                 clearInterval(timerGame);
             }
 
-            if(this.isGameOver(this.game)) {
+            if (this.isGameOver(this.game)) {
                 switch (this.game.gameResult) {
                     case this.draw:
                         alert('В этой игре никто не победил - Ничья');
@@ -93,20 +92,20 @@ export class GameFieldComponent implements OnInit {
     }
 
     gameFieldClick(event : any) {
-        if(this.gameService.checkAccess(this.gameToken, this.user)) {
+        if (this.gameService.checkAccess(this.gameToken, this.user)) {
 
             if (this.gameService.checkWhoTurn(this.gameToken, this.user)) {
                 let coordinateCellX : number = this.gameService.defineCell(event.offsetX, this.paintService.cellSize);
                 let coordinateCellY : number = this.gameService.defineCell(event.offsetY, this.paintService.cellSize);
 
-                if (this.gameService.checkCellValue(this.gameToken,coordinateCellX, coordinateCellY)) {
+                if (this.gameService.checkCellValue(this.gameToken, coordinateCellX, coordinateCellY)) {
                     let playerMarker = this.user === this.game.owner ? this.roleX : this.role0;
                     this.gameService.enterValueCell(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);
 
                     if (this.isThisOwner(this.game)) {
-                        this.paintService.drawX(this.canvas,coordinateCellX,coordinateCellY);
+                        this.paintService.drawX(this.canvas, coordinateCellX, coordinateCellY);
                     } else {
-                        this.paintService.draw0(this.canvas,coordinateCellX,coordinateCellY);
+                        this.paintService.draw0(this.canvas, coordinateCellX, coordinateCellY);
                     }
 
                     this.gameService.checkWin(this.gameToken, coordinateCellX, coordinateCellY, playerMarker);

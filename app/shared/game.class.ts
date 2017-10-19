@@ -3,8 +3,8 @@ export class Game {
     value : any[][];
     accessTokenPlayer1 : string;
     accessTokenPlayer2 : string;
-    
-    constructor(        
+
+    constructor(
         public owner : string,
         public opponent : string,
         public size : number,
